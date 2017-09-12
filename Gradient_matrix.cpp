@@ -68,7 +68,7 @@ struct GradMatrixRow {
 
     void operator()(const blocked_range<iter_type>& r){
         data_type** a = M;
-        for(iter_type i = r.begin(); r!= r.end(); i++){
+        for(iter_type i = r.begin(); i != r.end(); i++){
             for(iter_type j = 0; j < n - 1; j++) {
                 ord = ord && a[i][j] < a[i][j+1];
             }
@@ -90,7 +90,7 @@ struct GradMatrixCol {
 
     void operator()(const blocked_range<iter_type>& r){
         data_type** a = M;
-        for(iter_type i = r.begin(); r!= r.end(); i++){
+        for(iter_type i = r.begin(); i != r.end(); i++){
             for(iter_type j = 0; j < n - 1; j++) {
                 // Inverted row/col indices
                 ord = ord && a[j][i] < a[j+1][i];
@@ -98,7 +98,7 @@ struct GradMatrixCol {
         }
     }
 
-    void join(GradMatrixRow& rhs) {
+    void join(GradMatrixCol& rhs) {
         ord = ord && rhs.ord;
     }
 };
