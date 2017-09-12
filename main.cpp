@@ -6,30 +6,26 @@
 #include <fstream>
 #include "Stopwatch.h"
 #include "Utils.h"
+#include "Gradient_matrix.h"
 #include <tbb/tbb.h>
-#include "tbb/parallel_for.h"
-#include "tbb/parallel_reduce.h"
-#include "tbb/blocked_range.h"
 
 #define TESTS_NUM 40
 #define SIZES 10
 
 using namespace tbb;
 using namespace std;
-typedef long iter_type;
-typedef int data_type;
 
 // Max top strip. Parallelization strategy : Chunks of several rows
-struct MaxStripRowPar {
+struct MaxStripPar {
     data_type **input;
 
     data_type mtops;
     data_type topsum;
     iter_type row_len;
 
-    MaxStripRowPar(iter_type rl, data_type** _input) : mtops(0), topsum(0), row_len(rl), input(_input){}
+    MaxStripPar(iter_type rl, data_type** _input) : mtops(0), topsum(0), row_len(rl), input(_input){}
 
-    MaxStripRowPar( MaxStripRowPar& s, split ) {mtops = 0; topsum = 0; row_len = s.row_len; input = s.input;}
+    MaxStripPar( MaxStripPar& s, split ) {mtops = 0; topsum = 0; row_len = s.row_len; input = s.input;}
 
     void operator()( const blocked_range<iter_type>& r ) {
         data_type stripsum = 0;
@@ -42,7 +38,7 @@ struct MaxStripRowPar {
             mtops = std::max(topsum, mtops);
         }
     }
-    void join( MaxStripRowPar& rhs ) {mtops += std::max(mtops, topsum + rhs.mtops);}
+    void join( MaxStripPar& rhs ) {mtops += std::max(mtops, topsum + rhs.mtops);}
 
 };
 
@@ -75,7 +71,7 @@ result_data topMaxStripStrategyComparison(data_type** input, result_data pb_def 
     // Try the row-chunk strategy first (outer loop in parallel)
     double* row_par_time = new double[TESTS_NUM];
     if (input) {
-        MaxStripRowPar mstrip_r(n, input);
+        MaxStripPar mstrip_r(n, input);
         for(int i = 0; i < TESTS_NUM; i++) {
             t->start();
             parallel_reduce(blocked_range<iter_type>(1, n), mstrip_r);
@@ -133,27 +129,28 @@ result_data topMaxStripStrategyComparison(data_type** input, result_data pb_def 
     return pb_def;
 }
 
-result_data test(iter_type pb_size) {
+result_data testMaxStripStrategyComparison(iter_type pb_size) {
     result_data pb_def = { 0.0, 0.0, 0.0, pb_size, "max_top_strip"};
 
     data_type** _data;
     // Data initialization
     _data = new data_type*[pb_size];
-    cout << "Initialize data (size " << pb_size << ") ..." << endl;
-    for(iter_type i = 0; i < pb_size; i++) {
-        _data[i] = new data_type[pb_size];
-        for(iter_type j = 0; j < pb_size; j++) {
-            _data[i][j] = (((data_type) rand()) % 200) - 100;
-        }
-    }
-    cout << "Test different strategies ..." << endl;
+    init_data_matrix(_data, pb_size);
+    cout << "Test different strategies for maxtopstrip ..." << endl;
     result_data pb_res = topMaxStripStrategyComparison(_data, pb_def);
+    clean_data_matrix(_data, pb_size);
 
-    for(iter_type i = 0; i < pb_size; i++) {
-        delete _data[i];
-    }
-    delete _data;
+    return pb_res;
+}
 
+result_data testGradientMatrixStrategyComparison(iter_type pb_size) {
+    data_type** _data;
+    // Data initialization
+    _data = new data_type*[pb_size];
+    init_data_matrix(_data, pb_size);
+    cout << "Test different strategies for gradientmatrix ..." << endl;
+    result_data pb_res = Gradient_matrix::testGradientMatrix(_data, pb_size);
+    clean_data_matrix(_data, pb_size);
     return pb_res;
 }
 
@@ -188,7 +185,8 @@ int main(int argc, char** argv) {
     out_csv.open("parallel_strategies.csv");
 
     for(int i = 0; i < SIZES; i++) {
-        csvline(out_csv, test((2 << 10) << i));
+        csvline(out_csv, testMaxStripStrategyComparison((2 << 10) << i));
+        csvline(out_csv, testGradientMatrixStrategyComparison((2 << 10) << i));
     }
     out_csv.close();
     return 0;
