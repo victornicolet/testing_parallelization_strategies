@@ -58,6 +58,52 @@ struct GradMatrixPar {
 
 };
 
+struct GradMatrixRow {
+    data_type **M;
+    bool ord;
+    iter_type n;
+
+    GradMatrixRow(data_type** _input, iter_type n) : ord(true), M(_input), n(n) {}
+    GradMatrixRow(GradMatrixRow& s, split): ord(true), M(s.M), n(s.n) {}
+
+    void operator()(const blocked_range<iter_type>& r){
+        data_type** a = M;
+        for(iter_type i = r.begin(); r!= r.end(); i++){
+            for(iter_type j = 0; j < n - 1; j++) {
+                ord = ord && a[i][j] < a[i][j+1];
+            }
+        }
+    }
+
+    void join(GradMatrixRow& rhs) {
+        ord = ord && rhs.ord;
+    }
+};
+
+struct GradMatrixCol {
+    data_type **M;
+    bool ord;
+    iter_type n;
+
+    GradMatrixCol(data_type** _input, iter_type n) : ord(true), M(_input), n(n) {}
+    GradMatrixCol(GradMatrixCol& s, split): ord(true), M(s.M), n(s.n) {}
+
+    void operator()(const blocked_range<iter_type>& r){
+        data_type** a = M;
+        for(iter_type i = r.begin(); r!= r.end(); i++){
+            for(iter_type j = 0; j < n - 1; j++) {
+                // Inverted row/col indices
+                ord = ord && a[j][i] < a[j+1][i];
+            }
+        }
+    }
+
+    void join(GradMatrixRow& rhs) {
+        ord = ord && rhs.ord;
+    }
+};
+
+
 result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix, iter_type pb_size) {
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "Gradient_matrix"};
@@ -84,6 +130,18 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix, iter_t
     t->start();
     parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gm);
     tiled_version = t->stop();
+
+
+    // Strategy 2 : split the loop in two steps: check columns are orderd and lines
+    GradMatrixRow gr(input_matrix, pb_size);
+    GradMatrixCol gc(input_matrix, pb_size);
+    t->clear();
+    t->start();
+    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gr);
+    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gc);
+    // Don't forget to join the two results
+    bool ord_split = gr.ord && gc.ord;
+    split_loops_version = t->stop();
 
     pb_def.time_sequential = seq_time;
     pb_def.time_strategy1 = tiled_version;

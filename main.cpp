@@ -185,7 +185,7 @@ int main(int argc, char** argv) {
     out_csv.open("parallel_strategies.csv");
 
     for(int i = 0; i < SIZES; i++) {
-        csvline(out_csv, testMaxStripStrategyComparison((2 << 10) << i));
+        // csvline(out_csv, testMaxStripStrategyComparison((2 << 10) << i));
         csvline(out_csv, testGradientMatrixStrategyComparison((2 << 10) << i));
     }
     out_csv.close();
