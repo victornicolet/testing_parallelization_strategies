@@ -20,8 +20,16 @@ struct result_data {
     string name;
 };
 
+typedef struct {result_data* results; int num_results; } test_data;
+
 static void csvline(ostream& out, result_data rdat) {
     out << rdat.name << "," << rdat.pb_size << "," << rdat.time_sequential << "," << rdat.time_strategy1 << "," << rdat.time_strategy2 << endl;
+}
+
+static void csvlines(ostream& out, test_data t) {
+    for (int i = 0; i < t.num_results; ++i) {
+        csvline(out, t.results[i]);
+    }
 }
 
 static double dsum (double *array, int length) {

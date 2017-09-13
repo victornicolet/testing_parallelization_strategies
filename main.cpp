@@ -7,6 +7,7 @@
 #include "Stopwatch.h"
 #include "Utils.h"
 #include "Gradient_matrix.h"
+#include "Gradient_matrix_variations.h"
 #include <tbb/tbb.h>
 
 #define TESTS_NUM 40
@@ -154,6 +155,23 @@ result_data testGradientMatrixStrategyComparison(iter_type pb_size) {
     return pb_res;
 }
 
+test_data testGradientMatrixStrategyComparison2(iter_type pb_size) {
+    data_type** _data;
+    // Data initialization
+    _data = new data_type*[pb_size];
+    init_data_matrix(_data, pb_size);
+    cout << "Test different strategies for gradientmatrix (var) ..." << endl;
+    result_data pb_res1 =
+            Gradient_matrix_variations::testGradientMatrixVariation1(_data, pb_size);
+    result_data pb_res2 =
+            Gradient_matrix_variations::testGradientMatrixVariation2(_data, pb_size);
+    clean_data_matrix(_data, pb_size);
+    result_data* pb_res = new result_data[2];
+    pb_res[0] = pb_res1;
+    pb_res[1] = pb_res2;
+    return {pb_res, 2};
+}
+
 int main(int argc, char** argv) {
     int num_cores = -1;
     int opt;
@@ -186,7 +204,8 @@ int main(int argc, char** argv) {
 
     for(int i = 0; i < SIZES; i++) {
         // csvline(out_csv, testMaxStripStrategyComparison((2 << 10) << i));
-        csvline(out_csv, testGradientMatrixStrategyComparison((2 << 10) << i));
+        // csvline(out_csv, testGradientMatrixStrategyComparison((2 << 10) << i));
+        csvlines(out_csv, testGradientMatrixStrategyComparison2((2 << 10) << i));
     }
     out_csv.close();
     return 0;
