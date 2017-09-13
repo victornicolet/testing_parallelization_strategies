@@ -6,12 +6,14 @@
       <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Stopwatch.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Utils.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ExamplesTaskBased.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Utils.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix_variations.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ExamplesTaskBased.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Stopwatch.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Utils.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix_variations.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

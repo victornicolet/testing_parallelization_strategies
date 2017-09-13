@@ -8,6 +8,7 @@
 #include "Utils.h"
 #include "Gradient_matrix.h"
 #include "Gradient_matrix_variations.h"
+#include "ExamplesTaskBased.h"
 #include <tbb/tbb.h>
 
 #define TESTS_NUM 40
@@ -65,7 +66,7 @@ struct SumRow {
 
 
 
-// Note: Reads input[0..n] and writes output[1..n-1].
+// Note: Reads A[0..n] and writes output[1..n-1].
 result_data topMaxStripStrategyComparison(data_type** input, result_data pb_def ) {
     StopWatch *t = new StopWatch;
     iter_type n = pb_def.pb_size;
@@ -162,7 +163,7 @@ test_params tp) {
     return {pb_res, 2};
 }
 
-void run_tests(test_params tp) {
+void run_testset1(test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
         data_type** m = init_data_matrix(tp.pb_sizes[i]);
@@ -175,6 +176,16 @@ void run_tests(test_params tp) {
                << r.time_strategy2 << ","
                << pb_ress.results[0].time_strategy1 << ","
                << pb_ress.results[1].time_strategy1 << endl;
+        clean_data_matrix(m, tp.pb_sizes[i]);
+    }
+}
+
+void run_testset2(test_params tp) {
+    tp.out << tp.test_names << endl;
+    for (int i = 0; i < tp.nsizes; ++i) {
+        data_type** m = init_data_matrix(tp.pb_sizes[i]);
+        cout << "Speedup : " <<
+             testMaxTopLeftSquareReduction(m,tp.pb_sizes[i],tp) << endl;
         clean_data_matrix(m, tp.pb_sizes[i]);
     }
 }
@@ -219,15 +230,25 @@ int main(int argc, char** argv) {
     out_csv.open("parallel_strategies.csv");
 
 
-    test_params test_params1 = {
+//    test_params test_params1 = {
+//            nsizes,
+//            pb_sizes,
+//            "size,seq,single,split,var1,var2",
+//            TESTS_NUM,
+//            out_csv
+//    };
+//
+//    run_testset1(test_params1);
+
+    test_params test_params2 = {
             nsizes,
             pb_sizes,
-            "size,seq,single,split,var1,var2",
+            "speedup parallel_reduce/sequential",
             TESTS_NUM,
             out_csv
     };
 
-    run_tests(test_params1);
+    run_testset2(test_params2);
 
     out_csv.close();
     delete pb_sizes;
