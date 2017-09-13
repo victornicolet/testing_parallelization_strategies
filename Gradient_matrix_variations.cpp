@@ -4,6 +4,7 @@
 
 #include "Gradient_matrix_variations.h"
 #include "Stopwatch.h"
+#include "Utils.h"
 #include <tbb/tbb.h>
 
 using namespace tbb;
@@ -93,54 +94,27 @@ struct GradMatrixVar1Col {
 
 result_data Gradient_matrix_variations::testGradientMatrixVariation1(
         data_type **input_matrix,
-        iter_type pb_size) {
+        iter_type pb_size,
+        test_params tp) {
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "GM_linearTimeJoin_constantMem"};
-    double seq_time = 0.0;
-    double tiled_version = 0.0;
-    double split_loops_version = 0.0;
-
-    // Sequential version
-    bool ord = true;
-    data_type ** a = input_matrix;
-    t->start();
-    for(iter_type i = 0; i < pb_size; i++){
-        for(iter_type j = 0; j < pb_size; j++) {
-            ord = ord 	&& a[i][j] > a[i+1][j]
-                  && a[i][j] > a[i+1][j+1]
-                  && a[i][j] > a[i][j+1];
-        }
-    }
-    seq_time = t->stop();
 
     // Strategy 1 : with join updating using borders.
     GradMatrixVar1Par gm(input_matrix, pb_size);
-    t->clear();
-    t->start();
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gm);
-    tiled_version = t->stop();
+
+    double* tv_times = new double[tp.number_per_test];
+    for (int i = 0; i < tp.number_per_test; ++i) {
+        t->clear();
+        t->start();
+        parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gm);
+        tv_times[i] = t->stop();
+    }
+
+    pb_def.time_strategy1 = dmean(tv_times, tp.number_per_test);
 
 
-    // Strategy 2 : split the loop in two steps: check columns are orderd and lines
-    GradMatrixVar1Row gr(input_matrix, pb_size);
-    GradMatrixVar1Col gc(input_matrix, pb_size);
-    t->clear();
-    t->start();
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gr);
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gc);
-    // Don't forget to join the two results
-    bool ord_split = gr.ord && gc.ord;
-    split_loops_version = t->stop();
-
-    pb_def.time_sequential = seq_time;
-    pb_def.time_strategy1 = tiled_version;
-    pb_def.time_strategy2 = split_loops_version;
-
-    cout << "Parallelization strategy 1 (horizontal stripes with border) : "
-         << tiled_version << endl;
-    cout << "Parallelization strategy 2 (split loops) : "
-         <<  split_loops_version << endl;
-    cout << "Sequential time : " << seq_time << endl;
+    cout << "Parallelization strategy var1 (horizontal stripes with border) : "
+         << pb_def.time_strategy1 << endl;
 
     return pb_def;
 }
@@ -202,54 +176,26 @@ struct GradMatrixVar2Par {
 
 result_data Gradient_matrix_variations::testGradientMatrixVariation2(
         data_type **input_matrix,
-        iter_type pb_size) {
+        iter_type pb_size,
+        test_params tp) {
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "GM_constantTimeJoin_linearMem"};
-    double seq_time = 0.0;
-    double tiled_version = 0.0;
-    double split_loops_version = 0.0;
-
-    // Sequential version
-    bool ord = true;
-    data_type ** a = input_matrix;
-    t->start();
-    for(iter_type i = 0; i < pb_size; i++){
-        for(iter_type j = 0; j < pb_size; j++) {
-            ord = ord 	&& a[i][j] > a[i+1][j]
-                  && a[i][j] > a[i+1][j+1]
-                  && a[i][j] > a[i][j+1];
-        }
-    }
-    seq_time = t->stop();
 
     // Strategy 1 : with join updating using borders.
     GradMatrixVar2Par gm(input_matrix, pb_size);
-    t->clear();
-    t->start();
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gm);
-    tiled_version = t->stop();
+    double* tv_times = new double[tp.number_per_test];
+    for (int i = 0; i < tp.number_per_test; ++i) {
+        t->clear();
+        t->start();
+        parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gm);
+        tv_times[i] = t->stop();
+    }
+
+    pb_def.time_strategy1 = dmean(tv_times, tp.number_per_test);
 
 
-    // Strategy 2 : split the loop in two steps: check columns are orderd and lines
-    GradMatrixVar1Row gr(input_matrix, pb_size);
-    GradMatrixVar1Col gc(input_matrix, pb_size);
-    t->clear();
-    t->start();
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gr);
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gc);
-    // Don't forget to join the two results
-    bool ord_split = gr.ord && gc.ord;
-    split_loops_version = t->stop();
-
-    pb_def.time_sequential = seq_time;
-    pb_def.time_strategy1 = tiled_version;
-    pb_def.time_strategy2 = split_loops_version;
-
-    cout << "Parallelization strategy 1 (horizontal stripes with border) : "
-         << tiled_version << endl;
-    cout << "Parallelization strategy 2 (split loops) : "
-         <<  split_loops_version << endl;
-    cout << "Sequential time : " << seq_time << endl;
+    cout << "Parallelization strategy var2 (horizontal stripes with border) : "
+         << pb_def.time_strategy1 << endl;
 
     return pb_def;
 }

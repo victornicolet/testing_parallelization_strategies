@@ -4,6 +4,7 @@
 
 #include "Gradient_matrix.h"
 #include "Stopwatch.h"
+#include "Utils.h"
 #include <tbb/tbb.h>
 
 using namespace tbb;
@@ -104,7 +105,9 @@ struct GradMatrixCol {
 };
 
 
-result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix, iter_type pb_size) {
+result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
+                                                iter_type pb_size,
+                                                test_params tp) {
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "Gradient_matrix"};
     double seq_time = 0.0;
@@ -126,29 +129,38 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix, iter_t
 
     // Strategy 1 : with join updating using borders.
     GradMatrixPar gm(input_matrix, pb_size);
-    t->clear();
-    t->start();
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gm);
-    tiled_version = t->stop();
+
+    double* gm_times = new double[tp.number_per_test];
+    for (int i = 0; i < tp.number_per_test; ++i) {
+        t->clear();
+        t->start();
+        parallel_reduce(blocked_range<iter_type>(0, pb_size - 1), gm);
+        gm_times[i] = t->stop();
+    }
 
 
     // Strategy 2 : split the loop in two steps: check columns are orderd and lines
     GradMatrixRow gr(input_matrix, pb_size);
     GradMatrixCol gc(input_matrix, pb_size);
-    t->clear();
-    t->start();
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gr);
-    parallel_reduce(blocked_range<iter_type>(0,pb_size - 1), gc);
-    // Don't forget to join the two results
-    bool ord_split = gr.ord && gc.ord;
-    split_loops_version = t->stop();
+    double* grplusc_times = new double[tp.number_per_test];
+    for (int i = 0; i < tp.number_per_test; ++i) {
+        t->clear();
+        t->start();
+        parallel_reduce(blocked_range<iter_type>(0, pb_size - 1), gr);
+        parallel_reduce(blocked_range<iter_type>(0, pb_size - 1), gc);
+        // Don't forget to join the two results
+        bool ord_split = gr.ord && gc.ord;
+        grplusc_times[i] = t->stop();
+    }
 
     pb_def.time_sequential = seq_time;
-    pb_def.time_strategy1 = tiled_version;
-    pb_def.time_strategy2 = split_loops_version;
+    pb_def.time_strategy1 = dmean(gm_times, tp.number_per_test);
+    pb_def.time_strategy2 = dmean(grplusc_times, tp.number_per_test);
 
-    cout << "Parallelization strategy 1 (horizontal stripes with border) : " << tiled_version << endl;
-    cout << "Parallelization strategy 2 (split loops) : " <<  split_loops_version << endl;
+    cout << "Parallelization strategy 1 (horizontal stripes with border) : "
+         << pb_def.time_strategy1 << endl;
+    cout << "Parallelization strategy 2 (split loops) : "
+         <<  pb_def.time_strategy2 << endl;
     cout << "Sequential time : " << seq_time << endl;
 
     return pb_def;

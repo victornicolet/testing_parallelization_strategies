@@ -133,10 +133,7 @@ result_data topMaxStripStrategyComparison(data_type** input, result_data pb_def 
 result_data testMaxStripStrategyComparison(iter_type pb_size) {
     result_data pb_def = { 0.0, 0.0, 0.0, pb_size, "max_top_strip"};
 
-    data_type** _data;
-    // Data initialization
-    _data = new data_type*[pb_size];
-    init_data_matrix(_data, pb_size);
+    data_type** _data = init_data_matrix(pb_size);
     cout << "Test different strategies for maxtopstrip ..." << endl;
     result_data pb_res = topMaxStripStrategyComparison(_data, pb_def);
     clean_data_matrix(_data, pb_size);
@@ -144,32 +141,42 @@ result_data testMaxStripStrategyComparison(iter_type pb_size) {
     return pb_res;
 }
 
-result_data testGradientMatrixStrategyComparison(iter_type pb_size) {
-    data_type** _data;
-    // Data initialization
-    _data = new data_type*[pb_size];
-    init_data_matrix(_data, pb_size);
-    cout << "Test different strategies for gradientmatrix ..." << endl;
-    result_data pb_res = Gradient_matrix::testGradientMatrix(_data, pb_size);
-    clean_data_matrix(_data, pb_size);
-    return pb_res;
+result_data testGradientMatrixStrategyComparison(iter_type pb_size,
+                                                 data_type** _data,
+                                                 test_params tp) {
+
+    return Gradient_matrix::testGradientMatrix(_data, pb_size, tp);
 }
 
-test_data testGradientMatrixStrategyComparison2(iter_type pb_size) {
-    data_type** _data;
-    // Data initialization
-    _data = new data_type*[pb_size];
-    init_data_matrix(_data, pb_size);
+
+test_data testGradientMatrixStrategyComparison2(iter_type pb_size, data_type** _data,
+test_params tp) {
     cout << "Test different strategies for gradientmatrix (var) ..." << endl;
     result_data pb_res1 =
-            Gradient_matrix_variations::testGradientMatrixVariation1(_data, pb_size);
+            Gradient_matrix_variations::testGradientMatrixVariation1(_data, pb_size, tp);
     result_data pb_res2 =
-            Gradient_matrix_variations::testGradientMatrixVariation2(_data, pb_size);
-    clean_data_matrix(_data, pb_size);
+            Gradient_matrix_variations::testGradientMatrixVariation2(_data, pb_size, tp);
     result_data* pb_res = new result_data[2];
     pb_res[0] = pb_res1;
     pb_res[1] = pb_res2;
     return {pb_res, 2};
+}
+
+void run_tests(test_params tp) {
+    tp.out << tp.test_names << endl;
+    for (int i = 0; i < tp.nsizes; ++i) {
+        data_type** m = init_data_matrix(tp.pb_sizes[i]);
+        test_data pb_ress = testGradientMatrixStrategyComparison2(tp.pb_sizes[i],m,tp);
+        result_data r = testGradientMatrixStrategyComparison(tp.pb_sizes[i], m, tp);
+//      "tname,seq,single,split,var1,var2"
+        tp.out << tp.pb_sizes[i] << ","
+               << r.time_sequential << ","
+               << r.time_strategy1 << ","
+               << r.time_strategy2 << ","
+               << pb_ress.results[0].time_strategy1 << ","
+               << pb_ress.results[1].time_strategy1 << endl;
+        clean_data_matrix(m, tp.pb_sizes[i]);
+    }
 }
 
 int main(int argc, char** argv) {
@@ -198,15 +205,31 @@ int main(int argc, char** argv) {
         init.initialize(num_cores, UT_THREAD_DEFAULT_STACK_SIZE);
     }
 
+    // Test for matrix sizes ...
+    int nsizes = 20;
+    iter_type* pb_sizes = new iter_type[nsizes];
+
+    for (int j = 0; j < nsizes; ++j) {
+        pb_sizes[j] = (1 << 15) + 10000 * j;
+    }
+
+
 
     ofstream out_csv;
     out_csv.open("parallel_strategies.csv");
 
-    for(int i = 0; i < SIZES; i++) {
-        // csvline(out_csv, testMaxStripStrategyComparison((2 << 10) << i));
-        // csvline(out_csv, testGradientMatrixStrategyComparison((2 << 10) << i));
-        csvlines(out_csv, testGradientMatrixStrategyComparison2((2 << 10) << i));
-    }
+
+    test_params test_params1 = {
+            nsizes,
+            pb_sizes,
+            "size,seq,single,split,var1,var2",
+            TESTS_NUM,
+            out_csv
+    };
+
+    run_tests(test_params1);
+
     out_csv.close();
+    delete pb_sizes;
     return 0;
 }

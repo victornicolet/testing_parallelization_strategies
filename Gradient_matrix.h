@@ -9,7 +9,7 @@
 
 class Gradient_matrix {
 public:
-    static result_data testGradientMatrix(data_type **, iter_type);
+    static result_data testGradientMatrix(data_type **, iter_type, test_params);
 };
 
 

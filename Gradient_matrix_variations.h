@@ -9,8 +9,8 @@
 
 class Gradient_matrix_variations {
 public:
-    static result_data testGradientMatrixVariation1(data_type **, iter_type);
-    static result_data testGradientMatrixVariation2(data_type **, iter_type);
+    static result_data testGradientMatrixVariation1(data_type **, iter_type, test_params);
+    static result_data testGradientMatrixVariation2(data_type **, iter_type, test_params);
 };
 
 

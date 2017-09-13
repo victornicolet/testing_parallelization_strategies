@@ -11,6 +11,13 @@ using namespace std;
 typedef long iter_type;
 typedef int data_type;
 
+typedef struct {
+    int nsizes;
+    iter_type* pb_sizes;
+    string test_names;
+    int number_per_test;
+    ostream& out;
+} test_params;
 
 struct result_data {
     double time_sequential;
@@ -20,7 +27,7 @@ struct result_data {
     string name;
 };
 
-typedef struct {result_data* results; int num_results; } test_data;
+typedef struct {result_data* results; int num_results;} test_data;
 
 static void csvline(ostream& out, result_data rdat) {
     out << rdat.name << "," << rdat.pb_size << "," << rdat.time_sequential << "," << rdat.time_strategy1 << "," << rdat.time_strategy2 << endl;
@@ -39,8 +46,9 @@ static double dsum (double *array, int length) {
     return _dsum;
 }
 
-static void init_data_matrix(data_type** _data, iter_type pb_size) {
+static data_type** init_data_matrix(iter_type pb_size) {
     cout << "Initialize data (size " << pb_size << ") ..." << endl;
+    data_type** _data = new data_type*[pb_size];
     for(iter_type i = 0; i < pb_size; i++) {
         _data[i] = new data_type[pb_size];
         for(iter_type j = 0; j < pb_size; j++) {
