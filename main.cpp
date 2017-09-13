@@ -144,7 +144,7 @@ result_data testMaxStripStrategyComparison(iter_type pb_size) {
 result_data testGradientMatrixStrategyComparison(iter_type pb_size,
                                                  data_type** _data,
                                                  test_params tp) {
-
+    cout << "Test different strategies for gradientmatrix  ..." << endl;
     return Gradient_matrix::testGradientMatrix(_data, pb_size, tp);
 }
 
@@ -166,8 +166,8 @@ void run_tests(test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
         data_type** m = init_data_matrix(tp.pb_sizes[i]);
-        test_data pb_ress = testGradientMatrixStrategyComparison2(tp.pb_sizes[i],m,tp);
         result_data r = testGradientMatrixStrategyComparison(tp.pb_sizes[i], m, tp);
+        test_data pb_ress = testGradientMatrixStrategyComparison2(tp.pb_sizes[i],m,tp);
 //      "tname,seq,single,split,var1,var2"
         tp.out << tp.pb_sizes[i] << ","
                << r.time_sequential << ","

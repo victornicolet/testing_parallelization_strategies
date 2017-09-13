@@ -55,6 +55,7 @@ static data_type** init_data_matrix(iter_type pb_size) {
             _data[i][j] = (((data_type) rand()) % 200) - 100;
         }
     }
+    return _data;
 }
 
 static void clean_data_matrix(data_type **_data, iter_type pb_size) {
