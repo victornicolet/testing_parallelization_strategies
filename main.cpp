@@ -18,7 +18,7 @@ using namespace std;
 
 result_data testMaxStripStrategyComparison(iter_type pb_size, test_params tp) {
     result_data pb_def = { 0.0, 0.0, 0.0, pb_size, "max_top_strip"};
-    data_type** _data = init_data_matrix(pb_size);
+    data_type** _data = init_data_matrix_seq(pb_size);
     cout << "Test different strategies for maxtopstrip ..." << endl;
     result_data pb_res = topMaxStripStrategyComparison(_data, pb_def, tp);
     clean_data_matrix(_data, pb_size);
@@ -69,9 +69,9 @@ void run_testset1(test_params tp) {
 void run_testset2(test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
-        data_type** m = init_data_matrix(tp.pb_sizes[i]);
-        csvline(tp.out, testMaxTopLeftSquareReduction(m,tp.pb_sizes[i],tp));
-//        csvline(tp.out, testMaxTopLeftSquareTaskPipelined(m,tp.pb_sizes[i],tp));
+        data_type** m = init_data_matrix_seq(tp.pb_sizes[i]);
+//        csvline(tp.out, testMaxTopLeftSquareReduction(m,tp.pb_sizes[i],tp));
+        csvline(tp.out, testMaxTopLeftSquareTaskPipelined(m,tp.pb_sizes[i],tp));
         clean_data_matrix(m, tp.pb_sizes[i]);
     }
 }

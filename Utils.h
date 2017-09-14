@@ -71,6 +71,17 @@ static data_type** init_data_matrix(iter_type pb_size) {
     return _data;
 }
 
+static data_type** init_data_matrix_seq(iter_type pb_size) {
+    cout << "Initialize data (size " << pb_size << ") ..." << endl;
+    data_type** M = new data_type*[pb_size];
+    for(iter_type i = 0; i < pb_size; i++) {
+        M[i] = new data_type[pb_size];
+        for(iter_type j = 0; j < pb_size; j++) {
+            M[i][j] = (((data_type) rand()) % 200) - 100;
+        }
+    }
+    return M;
+}
 
 static void init_data_from_image(const char* filename){
     MImage img(filename);
