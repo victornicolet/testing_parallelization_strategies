@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
             out_csv
     };
 
-    run_testset1(test_params1);
+    //run_testset1(test_params1);
 //    testdfg();
 
     test_params test_params2 = {
