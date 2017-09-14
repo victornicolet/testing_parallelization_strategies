@@ -178,7 +178,7 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
          << pb_def.time_strategy1 << endl;
     cout << "Parallelization strategy 2 (split loops) : "
          <<  pb_def.time_strategy2 << endl;
-    cout << "Sequential time : " << seq_time << endl;
+    cout << "Sequential time : " << split_seq_time << endl;
 
     return pb_def;
 }
