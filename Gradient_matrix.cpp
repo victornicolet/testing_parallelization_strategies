@@ -126,7 +126,7 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
     // Sequential version : double loops
     double split_seq_time;
     ord = true;
-
+    data_type ** a = input_matrix;
     t->start();
     for(iter_type i = 0; i < pb_size; i++){
         for(iter_type j = 0; j < pb_size; j++) {
