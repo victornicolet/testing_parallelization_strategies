@@ -109,19 +109,36 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "Gradient_matrix"};
     double seq_time;
+    bool ord;
 
     // Sequential version
-    bool ord = true;
-    data_type ** a = input_matrix;
+//    ord = true;
+//    data_type ** a = input_matrix;
+//    t->start();
+//    for(iter_type i = 0; i < pb_size; i++){
+//        for(iter_type j = 0; j < pb_size; j++) {
+//            ord = ord 	&& a[i][j] > a[i+1][j]
+//                             && a[i][j] > a[i][j+1];
+//        }
+//    }
+//    seq_time = t->stop();
+
+    // Sequential version : double loops
+    double split_seq_time;
+    ord = true;
+
     t->start();
     for(iter_type i = 0; i < pb_size; i++){
         for(iter_type j = 0; j < pb_size; j++) {
-            ord = ord 	&& a[i][j] > a[i+1][j]
-                  && a[i][j] > a[i+1][j+1]
-                  && a[i][j] > a[i][j+1];
+            ord = ord 	&& a[i][j] > a[i+1][j];
         }
     }
-    seq_time = t->stop();
+    for(iter_type i = 0; i < pb_size; i++){
+        for(iter_type j = 0; j < pb_size; j++) {
+            ord = ord && a[i][j] > a[i][j+1];
+        }
+    }
+    split_seq_time = t->stop();
 
     // Strategy 1 : with join updating using borders.
     GradMatrixPar gm(input_matrix, pb_size);
