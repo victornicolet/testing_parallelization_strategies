@@ -4,139 +4,23 @@
 #include <iostream>
 #include <unistd.h>
 #include <fstream>
-#include "Stopwatch.h"
 #include "Utils.h"
+#include "MaxTopStrip.h"
 #include "Gradient_matrix.h"
 #include "Gradient_matrix_variations.h"
 #include "ExamplesTaskBased.h"
-#include <tbb/tbb.h>
 
 #define TESTS_NUM 40
-#define SIZES 10
+
 
 using namespace tbb;
 using namespace std;
 
-// Max top strip. Parallelization strategy : Chunks of several rows
-struct MaxStripPar {
-    data_type **input;
-
-    data_type mtops;
-    data_type topsum;
-    iter_type row_len;
-
-    MaxStripPar(iter_type rl, data_type** _input) : mtops(0), topsum(0), row_len(rl), input(_input){}
-
-    MaxStripPar( MaxStripPar& s, split ) {mtops = 0; topsum = 0; row_len = s.row_len; input = s.input;}
-
-    void operator()( const blocked_range<iter_type>& r ) {
-        data_type stripsum = 0;
-        for(iter_type i = r.begin(); i != r.end(); ++i) {
-            stripsum = 0;
-            for(iter_type j = 0; j < row_len; j++) {
-                stripsum += input[i][j];
-            }
-            topsum += stripsum;
-            mtops = std::max(topsum, mtops);
-        }
-    }
-    void join( MaxStripPar& rhs ) {mtops += std::max(mtops, topsum + rhs.mtops);}
-
-};
-
-
-// Max trop strip, inner loop (simply a sum tbh)
-struct SumRow {
-    data_type *input_row;
-    data_type sum;
-    iter_type row_len;
-
-    SumRow(iter_type rl):sum(0), row_len(rl){}
-
-    SumRow(SumRow& s, split) {sum = 0; row_len = s.row_len; input_row = s.input_row; }
-
-    void operator()(const blocked_range<iter_type>& r) {
-        for(iter_type i = r.begin(); i!= r.end(); ++i) {
-            sum += input_row[i];
-        }
-    }
-
-    void join(SumRow& rhs) {sum += rhs.sum; }
-};
-
-
-
-// Note: Reads A[0..n] and writes output[1..n-1].
-result_data topMaxStripStrategyComparison(data_type** input, result_data pb_def ) {
-    StopWatch *t = new StopWatch;
-    iter_type n = pb_def.pb_size;
-    // Try the row-chunk strategy first (outer loop in parallel)
-    double* row_par_time = new double[TESTS_NUM];
-    if (input) {
-        MaxStripPar mstrip_r(n, input);
-        for(int i = 0; i < TESTS_NUM; i++) {
-            t->start();
-            parallel_reduce(blocked_range<iter_type>(1, n), mstrip_r);
-            row_par_time[i] = t->stop();
-            t->clear();
-        }
-    } else {
-        cout << "No data." << endl;
-        return pb_def;
-    }
-    // Inner loop in parallel strategy
-    double* inner_strategy = new double[TESTS_NUM];
-    t->clear();
-    data_type mtops = 0;
-    data_type strip_sum = 0;
-    data_type topsum = 0;
-    SumRow sumrow(n);
-    for(int test = 0; test < TESTS_NUM; test++) {
-        t->start();
-        for (iter_type i = 0; i < n; i++) {
-            sumrow.input_row = input[i];
-            parallel_reduce(blocked_range<iter_type>(1, n), sumrow);
-            topsum += sumrow.sum;
-            mtops = std::max(mtops, topsum);
-        }
-        inner_strategy[test] = t->stop();
-    }
-
-
-    // Sequential time, for reference
-    mtops = 0;
-    topsum = 0;
-
-    t->clear();
-    t->start();
-
-    for (iter_type i = 0; i < n; i++) {
-        int sumr = 0;
-        for(iter_type j = 0; j < n; j++) {
-            sumr += input[i][j];
-        }
-        topsum += sumr;
-        mtops = std::max(mtops, topsum);
-    }
-    double time_seq = t->stop();
-
-    double row_par_time_mean = dmean(row_par_time, TESTS_NUM);
-    double inner_strategy_mean = dmean(inner_strategy, TESTS_NUM);
-    cout << "Parallelization strategy 1 (horizontal stripes) : " << row_par_time_mean << endl;
-    cout << "Parallelization strategy 2 (inner loop) : " << inner_strategy_mean << endl;
-    cout << "Sequential time : " << time_seq << endl;
-    pb_def.time_strategy1 = row_par_time_mean;
-    pb_def.time_strategy2 = inner_strategy_mean;
-    pb_def.time_sequential = time_seq;
-    return pb_def;
-}
-
-result_data testMaxStripStrategyComparison(iter_type pb_size) {
+result_data testMaxStripStrategyComparison(iter_type pb_size, test_params tp) {
     result_data pb_def = { 0.0, 0.0, 0.0, pb_size, "max_top_strip"};
-
     data_type** _data = init_data_matrix(pb_size);
     cout << "Test different strategies for maxtopstrip ..." << endl;
-    result_data pb_res = topMaxStripStrategyComparison(_data, pb_def);
+    result_data pb_res = topMaxStripStrategyComparison(_data, pb_def, tp);
     clean_data_matrix(_data, pb_size);
 
     return pb_res;
@@ -163,6 +47,7 @@ test_params tp) {
     return {pb_res, 2};
 }
 
+// Test set 1 : comparing strategies for sorted-matrix (gradient)
 void run_testset1(test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
@@ -180,6 +65,7 @@ void run_testset1(test_params tp) {
     }
 }
 
+// Test set 2 : comparing strategies for  max top left square
 void run_testset2(test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {

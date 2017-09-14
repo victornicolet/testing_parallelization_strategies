@@ -2,12 +2,14 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/MaxTopStrip.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Stopwatch.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix_variations.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Utils.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ExamplesTaskBased.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/ExamplesTaskBased.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix_variations.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/MaxTopStrip.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Gradient_matrix.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Stopwatch.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
