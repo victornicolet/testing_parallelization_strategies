@@ -108,7 +108,7 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
                                                 test_params tp) {
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "Gradient_matrix"};
-    double seq_time;
+//    double seq_time;
     bool ord;
 
     // Sequential version

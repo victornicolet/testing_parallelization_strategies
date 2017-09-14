@@ -386,25 +386,35 @@ result_data testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_para
 
 
 // Other parallel solution using scans and only one outer loop parallelized
+// Possibly could use one row for the colsums and avoid copying but for now
+// don't care and jsut copy along.
 struct MtlsMultiscan {
     data_type **A;
-    iter_type b,e;
+    iter_type b,e, n;
     // Linear size temp storage
     data_type *colsums;
     data_type* rowsums;
-    data_type mtops;
-    data_type topsum;
 
-    MtlsMultiscan(data_type** _in) : b(-1), e(-1), mtops(0), topsum(0), A(_in) {}
-    MtlsMultiscan(MtlsMultiscan& mtls, split) : mtops(0), topsum(0), A(mtls.A) {}
+    MtlsMultiscan(data_type** _in, iter_type n ) : n(n), b(-1), e(-1), A(_in) {
+        colsums = new data_type[n];
+        rowsums = new data_type[n];
+    }
+
+    MtlsMultiscan(MtlsMultiscan& mtls, split) : A(mtls.A) {
+        b= -1; e= -1; n = mtls.n;
+        colsums = new data_type[n];
+        rowsums = new data_type[n];
+    }
 
     void operator()(const blocked_range<iter_type>& r) {
+        data_type rsum = 0;
         for(iter_type i = r.begin(); i != r.end(); i++) {
-            topsum += A[i][i];
+            rsum = 0;
             for(iter_type j = 0; j < i; j++) {
-                topsum += A[i][j] + A[j][i];
+                rsum += A[i][j];
+                colsums[j] += A[i][j];
             }
-            mtops = max(mtops, topsum);
+            rowsums[i] = rsum;
         }
         b = r.begin();
         e = r.end();
@@ -412,8 +422,6 @@ struct MtlsMultiscan {
 
     void join(MtlsMultiscan& rhs) {
 
-        topsum += rhs.topsum;
-        mtops = max(mtops, topsum + rhs.mtops);
         // Cells of the righthand's side just need to be copied into the leftside's array
         for (iter_type i = rhs.b; i < rhs.e; ++i) {
             rowsums[i] = rhs.rowsums[i];
@@ -427,14 +435,47 @@ struct MtlsMultiscan {
     }
 };
 
+struct ReduceMultiScanProd {
+    iter_type n;
+    data_type *rowsums;
+    data_type *colsums;
+    data_type sum;
+    data_type mpss;
 
-result_data testMtlsMultiscanMultiScan(data_type** M, iter_type n, test_params tp) {
+    ReduceMultiScanProd(data_type* rs, data_type* cs, iter_type n) :
+            rowsums(rs), colsums(cs), n(n), sum(0), mpss(0) {}
+
+    ReduceMultiScanProd(ReduceMultiScanProd& rmp, split) : sum(0), mpss(0) {
+        rowsums = rmp.rowsums;
+        colsums = rmp.colsums;
+    }
+
+    void operator()(blocked_range<iter_type>& r) {
+        for (iter_type i = r.begin(); i < r.end(); ++i) {
+            sum += rowsums[i] + colsums[i];
+            mpss = max(mpss, sum);
+        }
+    }
+
+    void join(ReduceMultiScanProd& rhs) {
+        sum += rhs.sum;
+        mpss = max(mpss, sum + rhs.mpss);
+    }
+
+};
+
+
+result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     StopWatch t;
-    MtlsMultiscan mtls(M);
+    MtlsMultiscan mtls(M, n);
     double* times = new double[tp.number_per_test];
     for (int i = 0; i < tp.number_per_test; ++i) {
         t.start();
+        // First perform the column and row sums
         parallel_reduce(blocked_range<iter_type>(0,n), mtls);
+        // Reduce them like for the mps
+        ReduceMultiScanProd rmsp(mtls.rowsums, mtls.colsums,n);
+        parallel_reduce(blocked_range<iter_type>(0,n), rmsp);
         times[i] = t.stop();
     }
 
@@ -453,7 +494,7 @@ result_data testMtlsMultiscanMultiScan(data_type** M, iter_type n, test_params t
     }
     double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
-    cout << "Speedup: " << seqtime / st1par_time;
+    cout << "Speedup: " << seqtime / st1par_time << endl;
 
     return {seqtime, st1par_time, 0.0, n, "MtlsMultiscan"};
 }

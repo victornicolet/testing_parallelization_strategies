@@ -71,7 +71,8 @@ void run_testset2(test_params tp) {
     for (int i = 0; i < tp.nsizes; ++i) {
         data_type** m = init_data_matrix_seq(tp.pb_sizes[i]);
 //        csvline(tp.out, testMaxTopLeftSquareReduction(m,tp.pb_sizes[i],tp));
-        csvline(tp.out, testMaxTopLeftSquareTaskPipelined(m,tp.pb_sizes[i],tp));
+//        csvline(tp.out, testMaxTopLeftSquareTaskPipelined(m,tp.pb_sizes[i],tp));
+        csvline(tp.out, testMtlsMultiscan(m, tp.pb_sizes[i], tp));
         clean_data_matrix(m, tp.pb_sizes[i]);
     }
 }
@@ -116,26 +117,26 @@ int main(int argc, char** argv) {
     out_csv.open("parallel_strategies.csv");
 
 
-    test_params test_params1 = {
-            nsizes,
-            pb_sizes,
-            "size,seq,single,split,var1,var2",
-            TESTS_NUM,
-            out_csv
-    };
-
-    run_testset1(test_params1);
-//    testdfg();
-
-//    test_params test_params2 = {
+//    test_params test_params1 = {
 //            nsizes,
 //            pb_sizes,
-//            "speedup parallel_reduce/sequential",
+//            "size,seq,single,split,var1,var2",
 //            TESTS_NUM,
 //            out_csv
 //    };
 //
-//    run_testset2(test_params2);
+//    run_testset1(test_params1);
+//    testdfg();
+
+    test_params test_params2 = {
+            nsizes,
+            pb_sizes,
+            "speedup parallel_reduce/sequential",
+            TESTS_NUM,
+            out_csv
+    };
+
+    run_testset2(test_params2);
 
     out_csv.close();
     delete pb_sizes;
