@@ -382,3 +382,78 @@ result_data testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_para
 
     return {seqtime, st1par_time, 0.0, n, "maxTopLeftSquare"};
 }
+
+
+
+// Other parallel solution using scans and only one outer loop parallelized
+struct MtlsMultiscan {
+    data_type **A;
+    iter_type b,e;
+    // Linear size temp storage
+    data_type *colsums;
+    data_type* rowsums;
+    data_type mtops;
+    data_type topsum;
+
+    MtlsMultiscan(data_type** _in) : b(-1), e(-1), mtops(0), topsum(0), A(_in) {}
+    MtlsMultiscan(MtlsMultiscan& mtls, split) : mtops(0), topsum(0), A(mtls.A) {}
+
+    void operator()(const blocked_range<iter_type>& r) {
+        for(iter_type i = r.begin(); i != r.end(); i++) {
+            topsum += A[i][i];
+            for(iter_type j = 0; j < i; j++) {
+                topsum += A[i][j] + A[j][i];
+            }
+            mtops = max(mtops, topsum);
+        }
+        b = r.begin();
+        e = r.end();
+    }
+
+    void join(MtlsMultiscan& rhs) {
+
+        topsum += rhs.topsum;
+        mtops = max(mtops, topsum + rhs.mtops);
+        // Cells of the righthand's side just need to be copied into the leftside's array
+        for (iter_type i = rhs.b; i < rhs.e; ++i) {
+            rowsums[i] = rhs.rowsums[i];
+        }
+        // Add the sums accumulated so far in the array.
+        for (iter_type j = 0; j < rhs.e; ++j) {
+            colsums[j] += rhs.colsums[j];
+        }
+        // Update the borders
+        e = rhs.e;
+    }
+};
+
+
+result_data testMtlsMultiscanMultiScan(data_type** M, iter_type n, test_params tp) {
+    StopWatch t;
+    MtlsMultiscan mtls(M);
+    double* times = new double[tp.number_per_test];
+    for (int i = 0; i < tp.number_per_test; ++i) {
+        t.start();
+        parallel_reduce(blocked_range<iter_type>(0,n), mtls);
+        times[i] = t.stop();
+    }
+
+    // Measure sequential
+    data_type** A = M;
+    data_type mtops = 0;
+    data_type topsum = 0;
+    t.clear();
+    t.start();
+    for(iter_type i = 0; i < n; i++) {
+        topsum += A[i][i];
+        for(iter_type j = 0; j < i; j++) {
+            topsum += A[i][j] + A[j][i];
+        }
+        mtops = max(mtops, topsum);
+    }
+    double seqtime = t.stop();
+    double st1par_time = dmean(times, tp.number_per_test);
+    cout << "Speedup: " << seqtime / st1par_time;
+
+    return {seqtime, st1par_time, 0.0, n, "MtlsMultiscan"};
+}

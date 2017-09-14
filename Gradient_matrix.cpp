@@ -170,7 +170,7 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
         grplusc_times[i] = t->stop() + grp_intermediates[i];
     }
 
-    pb_def.time_sequential = seq_time;
+    pb_def.time_sequential = split_seq_time;
     pb_def.time_strategy1 = dmean(grp_intermediates, tp.number_per_test); //dmean(gm_times, tp.number_per_test);
     pb_def.time_strategy2 = dmean(grplusc_times, tp.number_per_test);
 
