@@ -87,6 +87,14 @@ static void clean_data_matrix(data_type **_data, iter_type pb_size) {
     delete _data;
 }
 
+data_type* zeroes(iter_type n) {
+    data_type *z = new data_type[n];
+    for (iter_type i = 0; i < n; ++i) {
+        z[i] = 0;
+    }
+    return z;
+}
+
 static double dmean (double* array, int length) {
     return  dsum(array, length) / length;
 }
