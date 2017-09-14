@@ -7,6 +7,6 @@
 
 #include "Utils.h"
 
-double testMaxTopLeftSquareReduction(data_type**, iter_type, test_params);
+result_data testMaxTopLeftSquareReduction(data_type**, iter_type, test_params);
 
 #endif //PARALLEL_STRATEGIES_TESTING_EXAMPLESTASKBASED_H

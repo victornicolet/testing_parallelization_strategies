@@ -164,7 +164,7 @@ struct MaxTopLeftSquare {
 };
 
 
-double testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_params tp) {
+result_data testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_params tp) {
     StopWatch t;
     MaxTopLeftSquare mtls(in);
     double* times = new double[tp.number_per_test];
@@ -188,6 +188,8 @@ double testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_params tp
         mtops = max(mtops, topsum);
     }
     double seqtime = t.stop();
+    double st1par_time = dmean(times, tp.number_per_test);
+    cout << "Speedup: " << seqtime / st1par_time;
 
-    return seqtime / dmean(times, tp.number_per_test);
+    return {seqtime, st1par_time, 0.0, n, "maxTopLeftSquare"};
 }

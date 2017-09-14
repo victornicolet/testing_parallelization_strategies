@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <tbb/tbb.h>
+#include "Image.h"
 
 using namespace std;
 using namespace tbb;
@@ -54,7 +55,7 @@ struct Initializer {
     iter_type pb_size;
 
     Initializer(data_type **_m, iter_type _s) : M(_m) , pb_size(_s){}
-    
+
     void operator()(const blocked_range<iter_type>& r) const {
         for(iter_type i = r.begin(); i < r.end(); i++) {
             M[i] = new data_type[pb_size];
@@ -71,6 +72,12 @@ static data_type** init_data_matrix(iter_type pb_size) {
     Initializer init(_data, pb_size);
     parallel_for(blocked_range<iter_type>(0,pb_size), init);
     return _data;
+}
+
+
+static void init_data_from_image(const char* filename){
+    MImage img(filename);
+    unchar** data = img.getData();
 }
 
 static void clean_data_matrix(data_type **_data, iter_type pb_size) {

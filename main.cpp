@@ -184,8 +184,7 @@ void run_testset2(test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
         data_type** m = init_data_matrix(tp.pb_sizes[i]);
-        cout << "Speedup : " <<
-             testMaxTopLeftSquareReduction(m,tp.pb_sizes[i],tp) << endl;
+        csvline(tp.out, testMaxTopLeftSquareReduction(m,tp.pb_sizes[i],tp));
         clean_data_matrix(m, tp.pb_sizes[i]);
     }
 }
