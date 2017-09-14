@@ -18,7 +18,7 @@ struct body {
     }
 };
 
-int test() {
+int testdfg() {
     graph g;
 
     continue_node<continue_msg> a( g, body("A"));

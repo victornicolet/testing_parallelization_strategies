@@ -84,7 +84,7 @@ static void clean_data_matrix(data_type **_data, iter_type pb_size) {
     delete _data;
 }
 
-data_type* mzeroes(iter_type n) {
+static data_type* mzeroes(iter_type n) {
     data_type *z = new data_type[n];
     for (iter_type i = 0; i < n; ++i) {
         z[i] = 0;

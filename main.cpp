@@ -116,15 +116,16 @@ int main(int argc, char** argv) {
     out_csv.open("parallel_strategies.csv");
 
 
-//    test_params test_params1 = {
-//            nsizes,
-//            pb_sizes,
-//            "size,seq,single,split,var1,var2",
-//            TESTS_NUM,
-//            out_csv
-//    };
-//
-//    run_testset1(test_params1);
+    test_params test_params1 = {
+            nsizes,
+            pb_sizes,
+            "size,seq,single,split,var1,var2",
+            TESTS_NUM,
+            out_csv
+    };
+
+    run_testset1(test_params1);
+//    testdfg();
 
     test_params test_params2 = {
             nsizes,
