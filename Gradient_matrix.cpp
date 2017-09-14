@@ -3,6 +3,7 @@
 //
 
 #include "Gradient_matrix.h"
+#include "Utils.h"
 
 using namespace tbb;
 
@@ -134,25 +135,29 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
     }
 
 
-    // Strategy 2 : split the loop in two steps: check columns are orderd and lines
+    // Strategy 2 : split the loop in two steps: check columns are ordered and lines
     GradMatrixRow gr(input_matrix, pb_size);
     GradMatrixCol gc(input_matrix, pb_size);
     double* grplusc_times = new double[tp.number_per_test];
+    double* grp_intermediates = new double[tp.number_per_test];
     for (int i = 0; i < tp.number_per_test; ++i) {
         t->clear();
         t->start();
         parallel_reduce(blocked_range<iter_type>(0, pb_size - 1), gr);
+        grp_intermediates[i] = t->stop();
+        t->clear();
+        t->start();
         parallel_reduce(blocked_range<iter_type>(0, pb_size - 1), gc);
         // Don't forget to join the two results
         bool ord_split = gr.ord && gc.ord;
-        grplusc_times[i] = t->stop();
+        grplusc_times[i] = t->stop() + grp_intermediates[i];
     }
 
     pb_def.time_sequential = seq_time;
-    pb_def.time_strategy1 = dmean(gm_times, tp.number_per_test);
+    pb_def.time_strategy1 = dmean(grp_intermediates, tp.number_per_test); //dmean(gm_times, tp.number_per_test);
     pb_def.time_strategy2 = dmean(grplusc_times, tp.number_per_test);
 
-    cout << "Parallelization strategy 1 (horizontal stripes with border) : "
+    cout << "Parallelization strategy 1 (split loops - intermediate) : "
          << pb_def.time_strategy1 << endl;
     cout << "Parallelization strategy 2 (split loops) : "
          <<  pb_def.time_strategy2 << endl;

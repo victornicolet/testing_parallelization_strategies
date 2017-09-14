@@ -5,7 +5,7 @@
 #include "ExamplesTaskBased.h"
 #include "Stopwatch.h"
 
-#define CHUNK_SIZE 1024
+#define CHUNK_SIZE 256
 
 using namespace tbb::flow;
 using namespace tbb;
@@ -84,9 +84,6 @@ static msqs_res joinAll(data_type* left, data_type* top, data_type* diag, iter_t
     return {msqs, tsqs};
 }
 
-static void join_msqs(msqs_res tl, msqs_res cur, msqs_res* m) {
-    *m =  {tl.tsqs + cur.tsqs, max(tl.msqs, tl.tsqs + cur.msqs)};
-}
 
 // The parallel part
 
@@ -141,25 +138,38 @@ void taskGraph(data_type** input) {
 }
 
 // Other implementation: graph task, but not fully parallel
+struct taskRes {
+public:
+    data_type sum;
+    data_type maxs;
+
+    taskRes(data_type sum, data_type m) : sum(sum), maxs(m) {}
+};
+
+
+static void join_msqs(taskRes* tl, taskRes* cur, taskRes* m) {
+    m->sum = tl->sum + cur->sum;
+    m->maxs =  max(tl->sum, tl->sum + cur->maxs);
+}
 
 struct fullComputeTask {
     data_type **input;
     data_type *aux;
     square s;
-    msqs_res *m;
+    taskRes *m;
     fullComputeTask* leftParent;
     fullComputeTask* topParent;
     fullComputeTask* topLeftParent;
 
     fullComputeTask(data_type** _inp, square _s) {
-        *m = {0,0};
+        m = new taskRes(0,0);
         input = _inp;
         s = _s;
         aux = new data_type[_s.size];
     }
 
     fullComputeTask(fullComputeTask* p, square _s) {
-        *m = {0,0};
+        m = new taskRes(0,0);
         input = p->input;
         s = _s;
         aux = new data_type[_s.size];
@@ -174,7 +184,7 @@ struct fullComputeTask {
     }
 
     fullComputeTask(fullComputeTask* pl, fullComputeTask* ptl, fullComputeTask* pt, square _s) {
-        *m = {0,0};
+        m = new taskRes(0,0);
         input = pl->input;
         s = _s;
         aux = new data_type[_s.size];
@@ -186,8 +196,8 @@ struct fullComputeTask {
     void operator()( continue_msg ) const {
         if(s.x == s.y) {
             computeDiagElement(input, aux, s);
-            join_msqs(*topLeftParent->m,
-                                   joinAll(leftParent->aux, topParent->aux, aux, s.size), m);
+            msqs_res _msqs = joinAll(leftParent->aux, topParent->aux, aux, s.size);
+            join_msqs(topLeftParent->m, new taskRes(_msqs.tsqs, _msqs.msqs),m);
         } else if (s.x > s.y) {
             computeLeftElement(input, aux, s);
             joinSum(leftParent->aux, aux, s.size);
