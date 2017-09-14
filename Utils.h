@@ -3,7 +3,10 @@
 //
 #include <string>
 #include <iostream>
+#include <tbb/tbb.h>
+
 using namespace std;
+using namespace tbb;
 
 #ifndef PARALLEL_STRATEGIES_TESTING_UTILS_H
 #define PARALLEL_STRATEGIES_TESTING_UTILS_H
@@ -46,15 +49,27 @@ static double dsum (double *array, int length) {
     return _dsum;
 }
 
+struct Initializer {
+    data_type **M;
+    iter_type pb_size;
+
+    Initializer(data_type **_m, iter_type _s) : M(_m) , pb_size(_s){}
+    
+    void operator()(const blocked_range<iter_type>& r) const {
+        for(iter_type i = r.begin(); i < r.end(); i++) {
+            M[i] = new data_type[pb_size];
+            for(iter_type j = 0; j < pb_size; j++) {
+                M[i][j] = (((data_type) rand()) % 200) - 100;
+            }
+        }
+    }
+};
+
 static data_type** init_data_matrix(iter_type pb_size) {
     cout << "Initialize data (size " << pb_size << ") ..." << endl;
     data_type** _data = new data_type*[pb_size];
-    for(iter_type i = 0; i < pb_size; i++) {
-        _data[i] = new data_type[pb_size];
-        for(iter_type j = 0; j < pb_size; j++) {
-            _data[i][j] = (((data_type) rand()) % 200) - 100;
-        }
-    }
+    Initializer init(_data, pb_size);
+    parallel_for(blocked_range<iter_type>(0,pb_size), init);
     return _data;
 }
 
