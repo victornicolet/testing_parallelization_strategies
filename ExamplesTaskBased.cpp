@@ -3,10 +3,7 @@
 //
 
 #include "ExamplesTaskBased.h"
-#include "Utils.h"
-#include "tbb/flow_graph.h"
 #include "Stopwatch.h"
-#include <tbb/tbb.h>
 
 #define CHUNK_SIZE 1024
 
@@ -16,11 +13,6 @@ using namespace std;
 
 typedef continue_node< continue_msg > node_t;
 typedef const continue_msg & msg_t;
-
-typedef struct flow_graph {
-    broadcast_node<continue_msg> start_node;
-    graph* g;
-} flow_graph;
 
 typedef struct {
     iter_type x;
@@ -93,8 +85,8 @@ static msqs_res joinAll(data_type* left, data_type* top, data_type* diag, iter_t
     return {msqs, tsqs};
 }
 
-static msqs_res join_msqs(msqs_res tl, msqs_res cur) {
-    return {tl.tsqs + cur.tsqs, max(tl.msqs, tl.tsqs + cur.msqs)};
+static void join_msqs(msqs_res tl, msqs_res cur, msqs_res* m) {
+    *m =  {tl.tsqs + cur.tsqs, max(tl.msqs, tl.tsqs + cur.msqs)};
 }
 
 // The parallel part
@@ -155,20 +147,20 @@ struct fullComputeTask {
     data_type **input;
     data_type *aux;
     square s;
-    msqs_res m;
+    msqs_res *m;
     fullComputeTask* leftParent;
     fullComputeTask* topParent;
     fullComputeTask* topLeftParent;
 
     fullComputeTask(data_type** _inp, square _s) {
-        m = {0,0};
+        *m = {0,0};
         input = _inp;
         s = _s;
         aux = new data_type[_s.size];
     }
 
     fullComputeTask(fullComputeTask* p, square _s) {
-        m = {0,0};
+        *m = {0,0};
         input = p->input;
         s = _s;
         aux = new data_type[_s.size];
@@ -183,7 +175,7 @@ struct fullComputeTask {
     }
 
     fullComputeTask(fullComputeTask* pl, fullComputeTask* ptl, fullComputeTask* pt, square _s) {
-        m = {0,0};
+        *m = {0,0};
         input = pl->input;
         s = _s;
         aux = new data_type[_s.size];
@@ -192,11 +184,11 @@ struct fullComputeTask {
         topParent = pt;
     }
 
-    void operator()( continue_msg ) {
+    void operator()( continue_msg ) const {
         if(s.x == s.y) {
             computeDiagElement(input, aux, s);
-            m = join_msqs(topLeftParent->m,
-                                   joinAll(leftParent->aux, topParent->aux, aux, s.size));
+            join_msqs(*topLeftParent->m,
+                                   joinAll(leftParent->aux, topParent->aux, aux, s.size), m);
         } else if (s.x > s.y) {
             computeLeftElement(input, aux, s);
             joinSum(leftParent->aux, aux, s.size);
@@ -207,21 +199,18 @@ struct fullComputeTask {
     }
 };
 
-flow_graph createTaskGraphPipelined(data_type **input, iter_type size) {
+void populateTaskGraphPipelined(graph* g, node_t parent,
+                                data_type **input, iter_type size) {
     int nsquares = (int) (size / CHUNK_SIZE) + 1;
-    graph g;
-
-
 
     fullComputeTask*** chunk = new fullComputeTask**[nsquares];
     node_t*** nodes = new node_t**[nsquares];
     // Create one empty parent task
     fullComputeTask* t0 = new fullComputeTask(input, {0,0,0});
-    broadcast_node< continue_msg > parent(g);
 
     if (nsquares < 10) {
         cout << "Problem is too small! Won't do anything." << endl;
-        return {parent, &g};
+
     }
 
     // Create the first tasks (top line, first diagonal, left column)
@@ -232,14 +221,14 @@ flow_graph createTaskGraphPipelined(data_type **input, iter_type size) {
 
     // The first task
     chunk[0][0] = new fullComputeTask(t0,t0,t0,{0,0,CHUNK_SIZE});
-    nodes[0][0] = new node_t(g, chunk[0][0]);
+    nodes[0][0] = new node_t(*g, chunk[0][0]);
     make_edge(parent, *nodes[0][0]);
 
     // Top line and column
     for(int i = 1; i < nsquares; i++) {
         chunk[0][i] = new fullComputeTask(t0, {i*CHUNK_SIZE, 0,
                                                 min((i+1) * CHUNK_SIZE, (int) size) - i * CHUNK_SIZE});
-        nodes[0][i] = new node_t(g, chunk[0][i]);
+        nodes[0][i] = new node_t(*g, chunk[0][i]);
         make_edge(parent, *nodes[0][i]);
 
         chunk[i][0] = new fullComputeTask(t0, {0, i*CHUNK_SIZE,
@@ -275,7 +264,7 @@ flow_graph createTaskGraphPipelined(data_type **input, iter_type size) {
             }
 
             // Create the nde corresponding to the task
-            nodes[i][j] = new node_t(g, chunk[i][j]);
+            nodes[i][j] = new node_t(*g, chunk[i][j]);
 
             // Create the dependency edges on the graph
             if(i==j) {
@@ -290,19 +279,21 @@ flow_graph createTaskGraphPipelined(data_type **input, iter_type size) {
 
         }
     }
-
-    return {parent, &g};
 }
 
 result_data testMaxTopLeftSquareTaskPipelined (data_type** in, iter_type n, test_params tp){
     StopWatch t;
 
     double* times = new double[tp.number_per_test];
+    graph g;
+    node_t start_node(g, [](msg_t){} );
+    populateTaskGraphPipelined(&g, start_node, in, n);
+
+
     for (int i = 0; i < tp.number_per_test; ++i) {
-        flow_graph fg = createTaskGraphPipelined(in, n);
         t.start();
-        fg.start_node.try_put(continue_msg());
-        fg.g->wait_for_all();
+        start_node.try_put(continue_msg());
+        g.wait_for_all();
         times[i] = t.stop();
     }
 

@@ -9,7 +9,7 @@
 #include "Gradient_matrix.h"
 #include "Gradient_matrix_variations.h"
 #include "ExamplesTaskBased.h"
-
+#include "TestDepFlowGraph.h"
 #define TESTS_NUM 40
 
 
