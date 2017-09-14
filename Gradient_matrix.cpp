@@ -3,9 +3,6 @@
 //
 
 #include "Gradient_matrix.h"
-#include "Stopwatch.h"
-#include "Utils.h"
-#include <tbb/tbb.h>
 
 using namespace tbb;
 
@@ -110,9 +107,7 @@ result_data Gradient_matrix::testGradientMatrix(data_type **input_matrix,
                                                 test_params tp) {
     StopWatch* t = new StopWatch();
     result_data pb_def = {0.0, 0.0, 0.0, pb_size, "Gradient_matrix"};
-    double seq_time = 0.0;
-    double tiled_version = 0.0;
-    double split_loops_version = 0.0;
+    double seq_time;
 
     // Sequential version
     bool ord = true;

@@ -1,11 +1,10 @@
-//
-// Created by nicolet on 12/09/17.
-//
-
 #ifndef PARALLEL_STRATEGIES_TESTING_GRADIENT_MATRIX_H
 #define PARALLEL_STRATEGIES_TESTING_GRADIENT_MATRIX_H
 
 #include "Utils.h"
+#include "Stopwatch.h"
+#include "Utils.h"
+#include <tbb/tbb.h>
 
 class Gradient_matrix {
 public:

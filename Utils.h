@@ -1,16 +1,13 @@
-//
-// Created by nicolet on 12/09/17.
-//
+#ifndef PARALLEL_STRATEGIES_TESTING_UTILS_H
+#define PARALLEL_STRATEGIES_TESTING_UTILS_H
+
 #include <string>
 #include <iostream>
 #include <tbb/tbb.h>
 #include "Image.h"
 
-using namespace std;
 using namespace tbb;
-
-#ifndef PARALLEL_STRATEGIES_TESTING_UTILS_H
-#define PARALLEL_STRATEGIES_TESTING_UTILS_H
+using namespace std;
 
 typedef long iter_type;
 typedef int data_type;
@@ -87,7 +84,7 @@ static void clean_data_matrix(data_type **_data, iter_type pb_size) {
     delete _data;
 }
 
-data_type* zeroes(iter_type n) {
+data_type* mzeroes(iter_type n) {
     data_type *z = new data_type[n];
     for (iter_type i = 0; i < n; ++i) {
         z[i] = 0;
