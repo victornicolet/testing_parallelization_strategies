@@ -440,12 +440,12 @@ struct ReduceMultiScanProd {
     data_type *rowsums;
     data_type *colsums;
     data_type sum;
-    data_type mpss;
+    data_type mtls;
 
     ReduceMultiScanProd(data_type* rs, data_type* cs, iter_type n) :
-            rowsums(rs), colsums(cs), n(n), sum(0), mpss(0) {}
+            rowsums(rs), colsums(cs), n(n), sum(0), mtls(0) {}
 
-    ReduceMultiScanProd(ReduceMultiScanProd& rmp, split) : sum(0), mpss(0) {
+    ReduceMultiScanProd(ReduceMultiScanProd& rmp, split) : sum(0), mtls(0) {
         rowsums = rmp.rowsums;
         colsums = rmp.colsums;
     }
@@ -453,22 +453,49 @@ struct ReduceMultiScanProd {
     void operator()(blocked_range<iter_type>& r) {
         for (iter_type i = r.begin(); i < r.end(); ++i) {
             sum += rowsums[i] + colsums[i];
-            mpss = max(mpss, sum);
+            mtls = max(mtls, sum);
         }
     }
 
     void join(ReduceMultiScanProd& rhs) {
         sum += rhs.sum;
-        mpss = max(mpss, sum + rhs.mpss);
+        mtls = max(mtls, sum + rhs.mtls);
     }
 
 };
 
+data_type mtlsMultiscanSequential(data_type** M, iter_type n, test_params tp){
+    data_type mtls, sum, aux_sum;
+    data_type* aux_rows, *aux_cols;
+
+    // Fill in the aux_rows and aux_cols with the partial sums
+    aux_rows = new data_type[n];
+    aux_cols = new data_type[n];
+    for(iter_type i = 0 ; i < n; i ++) {
+        aux_sum = M[i][i];
+        for(iter_type j = 0; j < i; j++) {
+            aux_sum += M[i][j];
+            aux_cols[j] += M[i][j];
+        }
+        aux_rows[i] = aux_sum;
+    }
+
+    // Compute the mtls using the sums stored in the aux arrays.
+    sum = 0;
+    mtls = 0;
+    for(iter_type i = 0; i <n; i++) {
+        sum += aux_rows[i] + aux_cols[i];
+        mtls = max(mtls, sum);
+    }
+
+    return mtls;
+}
 
 result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     StopWatch t;
     MtlsMultiscan mtls(M, n);
     double* times = new double[tp.number_per_test];
+    double mtls_par_opt = 0;
     for (int i = 0; i < tp.number_per_test; ++i) {
         t.start();
         // First perform the column and row sums
@@ -477,6 +504,7 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
         ReduceMultiScanProd rmsp(mtls.rowsums, mtls.colsums,n);
         parallel_reduce(blocked_range<iter_type>(0,n), rmsp);
         times[i] = t.stop();
+        mtls_par_opt = rmsp.mtls;
     }
 
     // Measure sequential
@@ -496,5 +524,13 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     double st1par_time = dmean(times, tp.number_per_test);
     cout << "Speedup: " << seqtime / st1par_time << endl;
 
-    return {seqtime, st1par_time, 0.0, n, "MtlsMultiscan"};
+    // Measure "optimized" sequential.
+    t.clear();
+    t.start();
+    double mtls_seq_opt = mtlsMultiscanSequential(M, n, tp);
+    double mtls_seq_opt_time = t.stop();
+
+    cout << "Test mtls_seq_opt == mtls_par_opt ? " << (mtls_par_opt == mtls_seq_opt) << endl;
+
+    return {seqtime, st1par_time, mtls_seq_opt_time, n, "MtlsMultiscan"};
 }
