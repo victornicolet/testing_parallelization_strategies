@@ -425,11 +425,11 @@ struct MtlsMultiscan {
     void join(MtlsMultiscan& rhs) {
 
         // Cells of the righthand's side just need to be copied into the leftside's array
-        for (iter_type i = rhs.b; i < rhs.e; ++i) {
+        for (iter_type i = rhs.b; i < rhs.e; i++) {
             rowsums[i] = rhs.rowsums[i];
         }
         // Add the sums accumulated so far in the array.
-        for (iter_type j = rhs.b; j < n; ++j) {
+        for (iter_type j = rhs.b; j < n; j++) {
             colsums[j] += rhs.colsums[j];
         }
         // Update the borders
@@ -460,13 +460,13 @@ struct ReduceMultiScanProd {
     }
 
     void join(ReduceMultiScanProd& rhs) {
-        sum += rhs.sum;
         mtls = max(mtls, sum + rhs.mtls);
+        sum += rhs.sum;
     }
 
 };
 
-data_type mtlsMultiscanSequential(data_type** M, iter_type n, test_params tp){
+data_type mtlsMultiscanSequential(data_type** M, iter_type n){
     data_type mtls, sum, aux_sum;
     data_type* aux_rows, *aux_cols;
 
@@ -526,15 +526,16 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     }
     double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
-    cout << "Speedup multiscan parallel / seq_naive: " << seqtime / st1par_time << endl;
+
 
     // Measure "optimized" sequential.
     t.clear();
     t.start();
-    double mtls_seq_opt = mtlsMultiscanSequential(M, n, tp);
+    double mtls_seq_opt = mtlsMultiscanSequential(M, n);
     double mtls_seq_opt_time = t.stop();
 
-    cout << "Speedup seq_opt/seq_naive : " << seqtime/mtls_seq_opt << endl;
+    cout << "Speedup multiscan parallel / seq_naive: " << seqtime / st1par_time << endl;
+    cout << "Speedup seq_opt/seq_naive : " << seqtime/mtls_seq_opt_time << endl;
     cout << "Test mtls_seq_opt == mtls_par_opt ? " << (mtls_par_opt == mtls_seq_opt) << endl;
 
     return {seqtime, st1par_time, mtls_seq_opt_time, n, "MtlsMultiscan"};
