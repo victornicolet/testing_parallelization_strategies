@@ -412,6 +412,8 @@ struct MtlsMultiscan {
             rsum = 0;
             for(iter_type j = 0; j < i; j++) {
                 rsum += A[i][j];
+            }
+            for(iter_type j = i + 1; j < n; j++) {
                 colsums[j] += A[i][j];
             }
             rowsums[i] = rsum;
@@ -427,7 +429,7 @@ struct MtlsMultiscan {
             rowsums[i] = rhs.rowsums[i];
         }
         // Add the sums accumulated so far in the array.
-        for (iter_type j = 0; j < rhs.e; ++j) {
+        for (iter_type j = rhs.b; j < n; ++j) {
             colsums[j] += rhs.colsums[j];
         }
         // Update the borders
@@ -475,6 +477,8 @@ data_type mtlsMultiscanSequential(data_type** M, iter_type n, test_params tp){
         aux_sum = M[i][i];
         for(iter_type j = 0; j < i; j++) {
             aux_sum += M[i][j];
+        }
+        for(iter_type j = i + 1; j < n; j++) {
             aux_cols[j] += M[i][j];
         }
         aux_rows[i] = aux_sum;
