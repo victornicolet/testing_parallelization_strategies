@@ -79,15 +79,19 @@ void run_testset2(test_params tp) {
 
 int main(int argc, char** argv) {
     int num_cores = -1;
+    int start_pow2_size = 15;
     int opt;
 
-    while ((opt = getopt(argc, argv, "n:")) != -1) {
+    while ((opt = getopt(argc, argv, "n:s:")) != -1) {
         switch (opt) {
             case 'n':
                 num_cores = atoi(optarg);
                 break;
+            case 's':
+                start_pow2_size = atoi(optarg);
+                break;
             default: /* '?' */
-                cerr << "Usage: " << argv[0] << " [-n ncores]\n";
+                cerr << "Usage: " << argv[0] << " [-n ncores] [-s power of 2 size]\n";
                 exit(EXIT_FAILURE);
         }
     }
@@ -108,7 +112,7 @@ int main(int argc, char** argv) {
     iter_type* pb_sizes = new iter_type[nsizes];
 
     for (int j = 0; j < nsizes; ++j) {
-        pb_sizes[j] = (1 << 15) + 10000 * j;
+        pb_sizes[j] = (1 << start_pow2_size) + 10000 * j;
     }
 
 

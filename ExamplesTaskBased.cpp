@@ -322,7 +322,7 @@ result_data testMaxTopLeftSquareTaskPipelined (data_type** in, iter_type n, test
     }
     double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
-    cout << "Speedup: " << seqtime / st1par_time;
+    cout << "Speedup: " << seqtime / st1par_time << endl;
 
     return {seqtime, st1par_time, 0.0, n, "maxTopLeftSquare with pipelined tasks"};
 }
@@ -378,7 +378,7 @@ result_data testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_para
     }
     double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
-    cout << "Speedup: " << seqtime / st1par_time;
+    cout << "Speedup reduction naive/ seq naive: " << seqtime / st1par_time << endl;
 
     return {seqtime, st1par_time, 0.0, n, "maxTopLeftSquare"};
 }
@@ -526,7 +526,7 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     }
     double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
-    cout << "Speedup: " << seqtime / st1par_time << endl;
+    cout << "Speedup multiscan parallel / seq_naive: " << seqtime / st1par_time << endl;
 
     // Measure "optimized" sequential.
     t.clear();
@@ -534,6 +534,7 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     double mtls_seq_opt = mtlsMultiscanSequential(M, n, tp);
     double mtls_seq_opt_time = t.stop();
 
+    cout << "Speedup seq_opt/seq_naive : " << seqtime/mtls_seq_opt << endl;
     cout << "Test mtls_seq_opt == mtls_par_opt ? " << (mtls_par_opt == mtls_seq_opt) << endl;
 
     return {seqtime, st1par_time, mtls_seq_opt_time, n, "MtlsMultiscan"};
