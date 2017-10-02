@@ -536,6 +536,8 @@ data_type mtlsMultiscanSequential(data_type** M, iter_type n){
         aux_rows[i] = aux_sum;
     }
 
+
+
     // Compute the mtls using the sums stored in the aux arrays.
     sum = 0;
     mtls = 0;
@@ -549,7 +551,7 @@ data_type mtlsMultiscanSequential(data_type** M, iter_type n){
 
 result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     StopWatch t;
-    MtlsColMultiscan mtls(M, n);
+    MtlsMultiscan mtls(M, n);
     double* times = new double[tp.number_per_test];
     double mtls_par_opt = 0;
     for (int i = 0; i < tp.number_per_test; ++i) {
@@ -561,6 +563,20 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
         parallel_reduce(blocked_range<iter_type>(0,n), rmsp);
         times[i] = t.stop();
         mtls_par_opt = rmsp.mtls;
+    }
+
+    MtlsColMultiscan mtlsCol(M, n);
+    double* timesCol = new double[tp.number_per_test];
+    double mtls_col_par = 0;
+    for (int i = 0; i < tp.number_per_test; ++i) {
+        t.start();
+        // First perform the column and row sums
+        parallel_reduce(blocked_range<iter_type>(0,n), mtlsCol);
+        // Reduce them like for the mps
+        ReduceMultiScanProd rmsp(mtlsCol.rowsums, mtlsCol.colsums,n);
+        parallel_reduce(blocked_range<iter_type>(0,n), rmsp);
+        timesCol[i] = t.stop();
+        mtls_col_par = rmsp.mtls;
     }
 
     // Measure sequential
@@ -578,17 +594,10 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     }
     double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
-
-
-    // Measure "optimized" sequential.
-    t.clear();
-    t.start();
-    double mtls_seq_opt = mtlsMultiscanSequential(M, n);
-    double mtls_seq_opt_time = t.stop();
+    double st2par_time = dmean(timesCol, tp.number_per_test);
 
     cout << "Speedup multiscan parallel / seq_naive: " << seqtime / st1par_time << endl;
-    cout << "Speedup seq_opt/seq_naive : " << seqtime/mtls_seq_opt_time << endl;
-    cout << "Test mtls_seq_opt == mtls_par_opt ? " << (mtls_par_opt == mtls_seq_opt) << endl;
 
-    return {seqtime, st1par_time, mtls_seq_opt_time, n, "MtlsMultiscan"};
+
+    return {seqtime, st1par_time, st2par_time, n, "MtlsMultiscan"};
 }
