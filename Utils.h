@@ -63,10 +63,34 @@ struct Initializer {
     }
 };
 
+struct InitializerSorted {
+    data_type **M;
+    iter_type pb_size;
+
+    InitializerSorted(data_type **_m, iter_type _s) : M(_m) , pb_size(_s){}
+
+    void operator()(const blocked_range<iter_type>& r) const {
+        for(iter_type i = r.begin(); i < r.end(); i++) {
+            M[i] = new data_type[pb_size];
+            for(iter_type j = 0; j < pb_size; j++) {
+                M[i][j] = (data_type) i + j + 0.0;
+            }
+        }
+    }
+};
+
 static data_type** init_data_matrix(iter_type pb_size) {
     cout << "Initialize data (size " << pb_size << ") ..." << endl;
     data_type** _data = new data_type*[pb_size];
     Initializer init(_data, pb_size);
+    parallel_for(blocked_range<iter_type>(0,pb_size), init);
+    return _data;
+}
+
+static data_type** init_data_matrix_sorted(iter_type pb_size){
+    cout << "Initialize data (size " << pb_size << ") ..." << endl;
+    data_type** _data = new data_type*[pb_size];
+    InitializerSorted init(_data, pb_size);
     parallel_for(blocked_range<iter_type>(0,pb_size), init);
     return _data;
 }
