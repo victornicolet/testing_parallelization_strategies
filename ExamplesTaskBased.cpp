@@ -437,6 +437,57 @@ struct MtlsMultiscan {
     }
 };
 
+// For comparison, try to go column-wise
+struct MtlsColMultiscan {
+    data_type **A;
+    iter_type b,e, n;
+    // Linear size temp storage
+    data_type *colsums;
+    data_type* rowsums;
+
+    MtlsColMultiscan(data_type** _in, iter_type n ) : n(n), b(-1), e(-1), A(_in) {
+        colsums = new data_type[n];
+        rowsums = new data_type[n];
+    }
+
+    MtlsColMultiscan(MtlsColMultiscan& mtls, split) : A(mtls.A) {
+        b= -1; e= -1; n = mtls.n;
+        colsums = new data_type[n];
+        rowsums = new data_type[n];
+    }
+
+//    COlumn-wise : we just need to exchange the colsum/rowsum and indexes in the read
+    void operator()(const blocked_range<iter_type>& r) {
+        data_type csum = 0;
+        for(iter_type i = r.begin(); i != r.end(); i++) {
+            csum = 0;
+            for(iter_type j = 0; j < i; j++) {
+                csum += A[j][i];
+            }
+            for(iter_type j = i + 1; j < n; j++) {
+                rowsums[j] += A[j][i];
+            }
+            colsums[i] = csum;
+        }
+        b = r.begin();
+        e = r.end();
+    }
+
+    void join(MtlsColMultiscan& rhs) {
+
+        // Cells of the righthand's side just need to be copied into the leftside's array
+        for (iter_type i = rhs.b; i < rhs.e; i++) {
+            rowsums[i] = rhs.rowsums[i];
+        }
+        // Add the sums accumulated so far in the array.
+        for (iter_type j = rhs.b; j < n; j++) {
+            colsums[j] += rhs.colsums[j];
+        }
+        // Update the borders
+        e = rhs.e;
+    }
+};
+
 struct ReduceMultiScanProd {
     iter_type n;
     data_type *rowsums;
@@ -465,6 +516,7 @@ struct ReduceMultiScanProd {
     }
 
 };
+
 
 data_type mtlsMultiscanSequential(data_type** M, iter_type n){
     data_type mtls, sum, aux_sum;
@@ -497,7 +549,7 @@ data_type mtlsMultiscanSequential(data_type** M, iter_type n){
 
 result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     StopWatch t;
-    MtlsMultiscan mtls(M, n);
+    MtlsColMultiscan mtls(M, n);
     double* times = new double[tp.number_per_test];
     double mtls_par_opt = 0;
     for (int i = 0; i < tp.number_per_test; ++i) {
