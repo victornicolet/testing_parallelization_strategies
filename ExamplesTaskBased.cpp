@@ -380,7 +380,7 @@ result_data testMaxTopLeftSquareReduction(data_type **in, iter_type n, test_para
     double st1par_time = dmean(times, tp.number_per_test);
     cout << "Speedup reduction naive/ seq naive: " << seqtime / st1par_time << endl;
 
-    return {seqtime, st1par_time, 0.0, n, "maxTopLeftSquare"};
+    return {seqtime, st1par_time, 0.0, n, "Mtls(seq-L_par-none)"};
 }
 
 
@@ -553,7 +553,6 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
     StopWatch t;
     MtlsMultiscan mtls(M, n);
     double* times = new double[tp.number_per_test];
-    double mtls_par_opt = 0;
     for (int i = 0; i < tp.number_per_test; ++i) {
         t.start();
         // First perform the column and row sums
@@ -562,12 +561,10 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
         ReduceMultiScanProd rmsp(mtls.rowsums, mtls.colsums,n);
         parallel_reduce(blocked_range<iter_type>(0,n), rmsp);
         times[i] = t.stop();
-        mtls_par_opt = rmsp.mtls;
     }
 
     MtlsColMultiscan mtlsCol(M, n);
     double* timesCol = new double[tp.number_per_test];
-    double mtls_col_par = 0;
     for (int i = 0; i < tp.number_per_test; ++i) {
         t.start();
         // First perform the column and row sums
@@ -576,28 +573,27 @@ result_data testMtlsMultiscan(data_type** M, iter_type n, test_params tp) {
         ReduceMultiScanProd rmsp(mtlsCol.rowsums, mtlsCol.colsums,n);
         parallel_reduce(blocked_range<iter_type>(0,n), rmsp);
         timesCol[i] = t.stop();
-        mtls_col_par = rmsp.mtls;
     }
 
     // Measure sequential
-    data_type** A = M;
-    data_type mtops = 0;
-    data_type topsum = 0;
-    t.clear();
-    t.start();
-    for(iter_type i = 0; i < n; i++) {
-        topsum += A[i][i];
-        for(iter_type j = 0; j < i; j++) {
-            topsum += A[i][j] + A[j][i];
-        }
-        mtops = max(mtops, topsum);
-    }
-    double seqtime = t.stop();
+//    data_type** A = M;
+//    data_type mtops = 0;
+//    data_type topsum = 0;
+//    t.clear();
+//    t.start();
+//    for(iter_type i = 0; i < n; i++) {
+//        topsum += A[i][i];
+//        for(iter_type j = 0; j < i; j++) {
+//            topsum += A[i][j] + A[j][i];
+//        }
+//        mtops = max(mtops, topsum);
+//    }
+//    double seqtime = t.stop();
     double st1par_time = dmean(times, tp.number_per_test);
     double st2par_time = dmean(timesCol, tp.number_per_test);
 
-    cout << "Speedup multiscan parallel / seq_naive: " << seqtime / st1par_time << endl;
+    cout << "Speedup multiscan row / col: " << st2par_time / st1par_time << endl;
 
 
-    return {seqtime, st1par_time, st2par_time, n, "MtlsMultiscan"};
+    return {0.0, st1par_time, st2par_time, n, "Mtls(none-row_par-col_par)"};
 }

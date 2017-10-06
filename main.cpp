@@ -47,11 +47,11 @@ test_params tp) {
     return {pb_res, 2};
 }
 
-// Test set 1 : comparing strategies for sorted-matrix (gradient)
-void run_testset1(test_params tp) {
+// Test set 1 : comparing strategies for sorted-matrix (gradient) (with sorted-array)
+void run_testset1(bool sorted, test_params tp) {
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
-        data_type** m = init_data_matrix_sorted(tp.pb_sizes[i]);
+        data_type** m = sorted ? init_data_matrix_sorted(tp.pb_sizes[i]) : init_data_matrix(tp.pb_sizes[i]);
         result_data r = testGradientMatrixStrategyComparison(tp.pb_sizes[i], m, tp);
         test_data pb_ress = testGradientMatrixStrategyComparison2(tp.pb_sizes[i],m,tp);
 //      "tname,seq,single,split,var1,var2"
@@ -118,19 +118,24 @@ int main(int argc, char** argv) {
 
 
     ofstream out_csv;
-    out_csv.open("parallel_strategies.csv");
+    out_csv.open("parallel_strategies_test_sortedness.csv");
 
 
-//    test_params test_params1 = {
-//            nsizes,
-//            pb_sizes,
-//            "size,seq,single,split,var1,var2",
-//            TESTS_NUM,
-//            out_csv
-//    };
-//
-//    run_testset1(test_params1);
-    testdfg();
+    test_params test_params1 = {
+            nsizes,
+            pb_sizes,
+            "size,seq,single,split,var1,var2",
+            TESTS_NUM,
+            out_csv
+    };
+
+    cout << "Run test with sorted array." << endl;
+    run_testset1(true, test_params1);
+    out_csv.close();
+
+    ofstream out_csv_mtls;
+    out_csv_mtls.open("parallel_strategies_test_mtls.csv");
+
 
     test_params test_params2 = {
             nsizes,
@@ -142,7 +147,7 @@ int main(int argc, char** argv) {
 
     run_testset2(test_params2);
 
-    out_csv.close();
+    out_csv_mtls.close();
     delete pb_sizes;
     return 0;
 }
