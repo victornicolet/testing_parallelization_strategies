@@ -9,6 +9,7 @@
 #include "Gradient_matrix.h"
 #include "Gradient_matrix_variations.h"
 #include "ExamplesTaskBased.h"
+#include "longest_common_subsequence.h"
 #include "TestDepFlowGraph.h"
 #define TESTS_NUM 40
 
@@ -77,18 +78,40 @@ void run_testset2(test_params tp) {
     }
 }
 
+// Test set 3 : measuring performance of tiled parallel implementation of LCS
+void run_testset3(test_params tp){
+    tp.out << tp.test_names << endl;
+    for (int i = 0; i < tp.nsizes; ++i) {
+        long pbsize = tp.pb_sizes[i];
+        LCS lcs(pbsize, pbsize);
+        lcs.measure_perfs(10);
+        LCS_timedata tmd = lcs.get_perfs();
+        csvline(tp.out, tmd);
+    }
+}
+
 int main(int argc, char** argv) {
     int num_cores = -1;
     int start_pow2_size = 15;
     int opt;
+    bool test_lcs = false;
+    bool test_1 = false;
+    bool test_2 = false;
 
-    while ((opt = getopt(argc, argv, "n:s:")) != -1) {
+    while ((opt = getopt(argc, argv, "n:s:lm")) != -1) {
         switch (opt) {
             case 'n':
                 num_cores = atoi(optarg);
                 break;
             case 's':
                 start_pow2_size = atoi(optarg);
+                break;
+            case 'l':
+                test_lcs = true;
+                break;
+            case 'm':
+                test_1 = true;
+                test_2 = true;
                 break;
             default: /* '?' */
                 cerr << "Usage: " << argv[0] << " [-n ncores] [-s power of 2 size]\n";
@@ -117,37 +140,92 @@ int main(int argc, char** argv) {
 
 
 
-    ofstream out_csv;
-    out_csv.open("parallel_strategies_test_sortedness.csv");
+    if(test_1) {
+        ofstream out_csv;
+        out_csv.open("parallel_strategies_test_sortedness.csv");
 
 
-    test_params test_params1 = {
-            nsizes,
-            pb_sizes,
-            "size,seq,single,split,var1,var2",
-            TESTS_NUM,
-            out_csv
-    };
+        test_params test_params1 = {
+                nsizes,
+                pb_sizes,
+                "size,seq,single,split,var1,var2",
+                TESTS_NUM,
+                out_csv
+        };
 
-    cout << "Run test with sorted array." << endl;
-    run_testset1(true, test_params1);
-    out_csv.close();
+        cout << "Run test with sorted array." << endl;
+        run_testset1(true, test_params1);
+        out_csv.close();
+    }
 
-    ofstream out_csv_mtls;
-    out_csv_mtls.open("parallel_strategies_test_mtls.csv");
+    if(test_2) {
+        ofstream out_csv_mtls;
+        out_csv_mtls.open("parallel_strategies_test_mtls.csv");
 
 
-    test_params test_params2 = {
-            nsizes,
-            pb_sizes,
-            "speedup parallel_reduce/sequential",
-            TESTS_NUM,
-            out_csv
-    };
+        test_params test_params2 = {
+                nsizes,
+                pb_sizes,
+                "speedup parallel_reduce/sequential",
+                TESTS_NUM,
+                out_csv_mtls
+        };
 
-    run_testset2(test_params2);
+        run_testset2(test_params2);
 
-    out_csv_mtls.close();
+        out_csv_mtls.close();
+    }
+
+
+    if(test_lcs) {
+        ofstream out_csv_lcs;
+        out_csv_lcs.open("parallel_strategies_test_lcs.csv");
+
+        test_params test_params3 = {
+                nsizes,
+                pb_sizes,
+                "performance of tiled lcs vs. sequential optim",
+                TESTS_NUM,
+                out_csv_lcs
+        };
+
+        run_testset3(test_params3);
+
+        out_csv_lcs.close();
+    }
     delete pb_sizes;
+    return 0;
+}
+
+int _main(int argc, char** argv){
+    char x[] = "aaaaaasdasdncdcggggabcuudsdssdcddxxxxxxx";
+    char y[] = "iiiiiiiiiiiiiiiiiiiiiggggabiiiiiiiiiiiii";
+    LCS test_lcs(x,y,40,40);
+    long res = test_lcs.longest_common_subsequence(1);
+    if (res != 6)
+        cout << "Implementation give wrong results." << endl;
+    else
+        cout << "OK" << endl;
+
+
+
+    long square_size = 1 << 12;
+    LCS lcs1(square_size, square_size);
+    StopWatch t;
+    t.start();
+    long s1 = lcs1.longest_common_subsequence(1);
+    cout << s1 << "\tTime : "<< t.stop()<< endl;
+    t.start();
+    long s2 = lcs1.longest_common_subsequence(2);
+    cout << s2 << "\tTime : "<< t.stop()<< endl;
+    if(s2 != s1)
+        cout << "Linear-space version invalid." << endl;
+
+    t.start();
+    long s3 = lcs1.longest_common_subsequence(3);
+    cout << s3 << "\tTime : "<< t.stop()<< endl;
+    if(s3 != s1)
+        cout << "Parallel tiled version invalid." << endl;
+
     return 0;
 }

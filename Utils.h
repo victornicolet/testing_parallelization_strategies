@@ -135,5 +135,4 @@ class Utils {
 
 };
 
-
 #endif //PARALLEL_STRATEGIES_TESTING_UTILS_H
