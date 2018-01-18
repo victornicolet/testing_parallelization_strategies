@@ -3,6 +3,7 @@
 //
 #include <math.h>
 #include <cstdlib>
+#include "tbb/tbb.h"
 #include <cstdio>
 #include "longest_common_subsequence.h"
 #include <time.h>
@@ -10,6 +11,8 @@
 
 
 #define TILE_SIZE 1024
+
+using namespace tbb;
 
 
 static char GenerateRandomChar() {
@@ -157,7 +160,7 @@ long LCS::lcs_parallel_tiled(){
         printf("Diagonal %ld, first cell %ld, last cell %ld\n", diagnum, first_cell, last_cell);
 #endif
 
-#pragma parallel for
+#pragma parallel for num_threads(4)
         for(cellnum = first_cell; cellnum <= last_cell; cellnum++ ) {
 //            Tile kernel
             long bx = max(1,(diagnum - cellnum)*TILE_SIZE );
@@ -176,6 +179,127 @@ long LCS::lcs_parallel_tiled(){
 }
 
 
+// The optimal? version
+
+void _lcs_super_kernel_linear_ (long start, long end, long n,
+                                long* C, long* Cs, long* Cp, bool* cnd,
+                                char* X, char* Y){
+    long i,j;
+    long r0, r1, rs0, rs1;
+    bool b;
+    C[0] = 0;
+    for (i = start; i <= end; ++i) {
+        r1 = 0;
+        rs1 = 0;
+        for(j = 1; j < n + 1; j++) {
+            b = X[i-1] == Y[j-1];
+//            LCS
+            r0 = C[j];
+            if(b)
+                C[j] = r1 + 1 ;
+            else
+                C[j] = max(C[j],C[j-1]);
+            r1 = r0;
+//            Suffix
+            rs0 = Cs[j];
+
+            if(b)
+                Cs[j] = rs1 + 1;
+            else
+                Cs[j] = 0;
+
+            rs1 = rs0;
+//            Prefix
+            if(j - i >= 0){
+                cnd[j-i] = cnd[j-i] && b;
+                if(cnd[j-i])
+                    Cp[j-i] += 1;
+                else
+                    Cp[j-i] += 0;
+            }
+        }
+    }
+    return;
+}
+
+struct _lcs {
+    long n;
+    long* Cs;
+    long* Cp;
+    long* C;
+    long lcs;
+};
+
+_lcs _lcs_join_(_lcs left, _lcs right){
+    long j;
+    long Csp_max = 0;
+    for(j = 0; j <= right.n; j++){
+        Csp_max = max(Csp_max, left.Cs[j] + right.Cp[j]);
+    }
+    return {left.n, right.Cs, left.Cp, left.C, max(max(left.lcs, right.lcs), Csp_max)};
+}
+
+struct LcsReduction {
+    char *X;
+    char *Y;
+    long n, m;
+    bool* cnd;
+    _lcs lcs;
+
+    LcsReduction(char* _X, char* _Y, long m, long n) : X(_X), Y(_Y), m(m), n(n) {
+        long *C = new long[n+1];
+        long *Cp = new long[n+1];
+        long *Cs = new long[n+1];
+        cnd = new bool[n+1];
+
+        for(long i = 0; i < n +1; i++) {
+            C[i] = 0;
+            Cp[i] = 0;
+            Cs[i] = 0;
+            cnd[i] = true;
+        }
+        lcs = {n, Cs, Cp, C, 0};
+    }
+
+    LcsReduction(LcsReduction& s, split): X(s.X), Y(s.Y), m(s.m), n(s.n) {
+        long _n = s.n;
+        long *C = new long[_n+1];
+        long *Cp = new long[_n+1];
+        long *Cs = new long[_n+1];
+        cnd = new bool[n+1];
+
+        for(long i = 0; i < _n +1; i++) {
+            C[i] = 0;
+            Cp[i] = 0;
+            Cs[i] = 0;
+            cnd[i] = true;
+        }
+        lcs = {_n, Cs, Cp, C, 0};
+
+    }
+
+    void operator()(const blocked_range<long>& r){
+        _lcs_super_kernel_linear_(r.begin(), r.end(), n, lcs.C, lcs.Cs, lcs.Cp, cnd, X, Y);
+        lcs.lcs = lcs.C[n];
+    }
+
+    void join(LcsReduction& rhs) {
+        lcs = _lcs_join_(lcs, rhs.lcs);
+        for(long i = 0; i < n + 1; i++){
+            cnd[i] = true;
+            lcs.C[i] = 0;
+        }
+    }
+};
+
+
+long LCS::lcs_parallel_rowblocks() {
+    LcsReduction lcsr(X,Y,X_size,Y_size);
+    parallel_reduce(blocked_range<long>(0,X_size), lcsr);
+    return lcsr.lcs.lcs;
+}
+
+
 long LCS::longest_common_subsequence(int strategy){
 //    Strategy 1 : sequential naïve implementation
     switch (strategy) {
@@ -185,6 +309,8 @@ long LCS::longest_common_subsequence(int strategy){
             return lcs_sequential_fast();
         case 3:
             return lcs_parallel_tiled();
+        case 4:
+            return lcs_parallel_rowblocks();
         default:
             return 0L;
     }

@@ -90,7 +90,7 @@ void run_testset3(test_params tp){
     }
 }
 
-int main(int argc, char** argv) {
+int _main(int argc, char** argv) {
     int num_cores = -1;
     int start_pow2_size = 15;
     int opt;
@@ -197,7 +197,7 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-int _main(int argc, char** argv){
+int main(int argc, char** argv){
     char x[] = "aaaaaasdasdncdcggggabcuudsdssdcddxxxxxxx";
     char y[] = "iiiiiiiiiiiiiiiiiiiiiggggabiiiiiiiiiiiii";
     LCS test_lcs(x,y,40,40);
@@ -209,7 +209,7 @@ int _main(int argc, char** argv){
 
 
 
-    long square_size = 1 << 12;
+    long square_size = 1 << 13;
     LCS lcs1(square_size, square_size);
     StopWatch t;
     t.start();
@@ -226,6 +226,17 @@ int _main(int argc, char** argv){
     cout << s3 << "\tTime : "<< t.stop()<< endl;
     if(s3 != s1)
         cout << "Parallel tiled version invalid." << endl;
+
+    static task_scheduler_init
+            init(task_scheduler_init::deferred);
+
+    init.initialize(4, UT_THREAD_DEFAULT_STACK_SIZE);
+
+    t.start();
+    long s4 = lcs1.longest_common_subsequence(4);
+    cout << s4 << "\tTime : "<< t.stop()<< endl;
+    if(s4 != s1)
+        cout << "Parallel reduction version invalid." << endl;
 
     return 0;
 }

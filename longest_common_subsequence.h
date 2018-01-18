@@ -30,7 +30,7 @@ class LCS {
     long lcs_sequential_naive();
     long lcs_sequential_fast();
     long lcs_parallel_tiled();
-
+    long lcs_parallel_rowblocks();
     void do_perf_update();
 
 public:
