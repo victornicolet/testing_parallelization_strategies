@@ -35,6 +35,8 @@ LCS::LCS(long m, long n) {
     perfs.seq_naive = 0.0;
     perfs.seq_optim = 0.0;
     perfs.par_tiled = 0.0;
+    perfs.row_blocks = 0.0;
+    perfs.row_blocks_bis = 0.0;
 
     srand(time(NULL));
 //    Initialize the data randomly
@@ -339,14 +341,8 @@ struct LcsReductionConstJoin {
     }
 
     void join(LcsReductionConstJoin& rhs) {
-        lcs = _lcs_join_(lcs, rhs.lcs);
-        for(long i = 0; i < n + 1; i++){
-            cnd[i] = true;
-            lcs.C[i] = 0;
-
-
-
-        }
+        cnd[0] = true;
+        lcs = rhs.lcs;
     }
 };
 
@@ -402,16 +398,28 @@ void LCS::do_perf_update() {
     t4 = t.stop();
 
     t.start();
-    lcs_parallel_rowblocks();
+    lcs_parallel_rowblocks_constjoin();
     t4bis = t.stop();
 
     perfs.seq_naive = perfs.seq_naive + t1 / 2;
     perfs.seq_optim = perfs.seq_optim + t2 / 2;
     perfs.par_tiled = perfs.par_tiled + t3 / 2;
-    perfs.row_blocks = perfs.row_blocks + t3 / 2;
-    perfs.row_blocks_bis = perfs.row_blocks_bis + t3 / 2;
+    perfs.row_blocks = perfs.row_blocks + t4 / 2;
+    perfs.row_blocks_bis = perfs.row_blocks_bis + t4bis / 2;
+
+    print_perfs();
 
     return;
+}
+
+
+void LCS::print_perfs() {
+    cout << "-------------------------" << endl;
+    cout << "Sequential: " << perfs.seq_naive << endl;
+    cout << "Seq optim : " << perfs.seq_optim << endl;
+    cout << "Par. tiled: " << perfs.par_tiled << endl;
+    cout << "Row blocks: " << perfs.row_blocks << endl;
+    cout << "Rows const: " << perfs.row_blocks_bis << endl;
 }
 
 void LCS::measure_perfs(int n){

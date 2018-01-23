@@ -38,6 +38,7 @@ class LCS {
     long lcs_parallel_rowblocks();
     long lcs_parallel_rowblocks_constjoin();
     void do_perf_update();
+    void print_perfs();
 
 public:
     LCS(long m, long n);

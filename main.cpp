@@ -198,14 +198,13 @@ int _main(int argc, char** argv) {
 }
 
 int main(int argc, char** argv){
-    int nsizes = 20;
-    iter_type* pb_sizes = new iter_type[nsizes];
-
-
     ofstream out_csv_lcs;
     out_csv_lcs.open("parallel_strategies_test_lcs.csv");
 
-    int start_pow2_size = 15;
+
+    int nsizes = 2;
+    iter_type* pb_sizes = new iter_type[nsizes];
+    int start_pow2_size = 10;
 
     for (int j = 0; j < nsizes; ++j) {
         pb_sizes[j] = (1 << start_pow2_size) + 10000 * j;
@@ -213,7 +212,7 @@ int main(int argc, char** argv){
 
 
     test_params tp = {
-            10,
+            2,
             pb_sizes,
             "performance of tiled lcs vs. sequential optim",
             TESTS_NUM,
