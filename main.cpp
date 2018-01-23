@@ -198,45 +198,36 @@ int _main(int argc, char** argv) {
 }
 
 int main(int argc, char** argv){
-    char x[] = "aaaaaasdasdncdcggggabcuudsdssdcddxxxxxxx";
-    char y[] = "iiiiiiiiiiiiiiiiiiiiiggggabiiiiiiiiiiiii";
-    LCS test_lcs(x,y,40,40);
-    long res = test_lcs.longest_common_subsequence(1);
-    if (res != 6)
-        cout << "Implementation give wrong results." << endl;
-    else
-        cout << "OK" << endl;
+    int nsizes = 20;
+    iter_type* pb_sizes = new iter_type[nsizes];
 
 
+    ofstream out_csv_lcs;
+    out_csv_lcs.open("parallel_strategies_test_lcs.csv");
 
-    long square_size = 1 << 13;
-    LCS lcs1(square_size, square_size);
-    StopWatch t;
-    t.start();
-    long s1 = lcs1.longest_common_subsequence(1);
-    cout << s1 << "\tTime : "<< t.stop()<< endl;
-    t.start();
-    long s2 = lcs1.longest_common_subsequence(2);
-    cout << s2 << "\tTime : "<< t.stop()<< endl;
-    if(s2 != s1)
-        cout << "Linear-space version invalid." << endl;
+    int start_pow2_size = 15;
 
-    t.start();
-    long s3 = lcs1.longest_common_subsequence(3);
-    cout << s3 << "\tTime : "<< t.stop()<< endl;
-    if(s3 != s1)
-        cout << "Parallel tiled version invalid." << endl;
+    for (int j = 0; j < nsizes; ++j) {
+        pb_sizes[j] = (1 << start_pow2_size) + 10000 * j;
+    }
 
-    static task_scheduler_init
-            init(task_scheduler_init::deferred);
 
-    init.initialize(4, UT_THREAD_DEFAULT_STACK_SIZE);
+    test_params tp = {
+            10,
+            pb_sizes,
+            "performance of tiled lcs vs. sequential optim",
+            TESTS_NUM,
+            out_csv_lcs
+    };
 
-    t.start();
-    long s4 = lcs1.longest_common_subsequence(4);
-    cout << s4 << "\tTime : "<< t.stop()<< endl;
-    if(s4 != s1)
-        cout << "Parallel reduction version invalid." << endl;
 
-    return 0;
+    tp.out << tp.test_names << endl;
+    for (int i = 0; i < tp.nsizes; ++i) {
+        long pbsize = tp.pb_sizes[i];
+        LCS lcs(pbsize, pbsize);
+        lcs.measure_perfs(10);
+        LCS_timedata tmd = lcs.get_perfs();
+        csvline(tp.out, tmd);
+    }
+
 }

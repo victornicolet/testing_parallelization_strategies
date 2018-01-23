@@ -131,7 +131,7 @@ long LCS::lcs_sequential_fast(){
 // A regular tile kernel
 
 
-// A parallel tiled version of the sequential algorithm using a matric as auxliary
+// A parallel tiled version of the sequential algorithm using a matrix for dynamic programming
 long LCS::lcs_parallel_tiled(){
     long lcs = 1;
     long **C;
@@ -293,12 +293,75 @@ struct LcsReduction {
 };
 
 
+
+struct LcsReductionConstJoin {
+    char *X;
+    char *Y;
+    long n, m;
+    bool* cnd;
+    _lcs lcs;
+
+    LcsReductionConstJoin(char* _X, char* _Y, long m, long n) : X(_X), Y(_Y), m(m), n(n) {
+        long *C = new long[n+1];
+        long *Cp = new long[n+1];
+        long *Cs = new long[n+1];
+        cnd = new bool[n+1];
+
+        for(long i = 0; i < n +1; i++) {
+            C[i] = 0;
+            Cp[i] = 0;
+            Cs[i] = 0;
+            cnd[i] = true;
+        }
+        lcs = {n, Cs, Cp, C, 0};
+    }
+
+    LcsReductionConstJoin(LcsReductionConstJoin& s, split): X(s.X), Y(s.Y), m(s.m), n(s.n) {
+        long _n = s.n;
+        long *C = new long[_n+1];
+        long *Cp = new long[_n+1];
+        long *Cs = new long[_n+1];
+        cnd = new bool[n+1];
+
+        for(long i = 0; i < _n +1; i++) {
+            C[i] = 0;
+            Cp[i] = 0;
+            Cs[i] = 0;
+            cnd[i] = true;
+        }
+        lcs = {_n, Cs, Cp, C, 0};
+
+    }
+
+    void operator()(const blocked_range<long>& r){
+        _lcs_super_kernel_linear_(r.begin(), r.end(), n, lcs.C, lcs.Cs, lcs.Cp, cnd, X, Y);
+        lcs.lcs = lcs.C[n];
+    }
+
+    void join(LcsReductionConstJoin& rhs) {
+        lcs = _lcs_join_(lcs, rhs.lcs);
+        for(long i = 0; i < n + 1; i++){
+            cnd[i] = true;
+            lcs.C[i] = 0;
+
+
+
+        }
+    }
+};
+
+
 long LCS::lcs_parallel_rowblocks() {
     LcsReduction lcsr(X,Y,X_size,Y_size);
     parallel_reduce(blocked_range<long>(0,X_size), lcsr);
     return lcsr.lcs.lcs;
 }
 
+long LCS::lcs_parallel_rowblocks_constjoin() {
+    LcsReductionConstJoin lcsr(X,Y,X_size,Y_size);
+    parallel_reduce(blocked_range<long>(0,X_size), lcsr);
+    return lcsr.lcs.lcs;
+}
 
 long LCS::longest_common_subsequence(int strategy){
 //    Strategy 1 : sequential naïve implementation
@@ -311,6 +374,8 @@ long LCS::longest_common_subsequence(int strategy){
             return lcs_parallel_tiled();
         case 4:
             return lcs_parallel_rowblocks();
+        case 5:
+            return lcs_parallel_rowblocks_constjoin();
         default:
             return 0L;
     }
@@ -318,7 +383,7 @@ long LCS::longest_common_subsequence(int strategy){
 
 void LCS::do_perf_update() {
     StopWatch t;
-    double t1,t2,t3;
+    double t1,t2,t3, t4, t4bis;
 
     t.start();
     lcs_sequential_naive();
@@ -332,9 +397,19 @@ void LCS::do_perf_update() {
     lcs_parallel_tiled();
     t3 = t.stop();
 
+    t.start();
+    lcs_parallel_rowblocks();
+    t4 = t.stop();
+
+    t.start();
+    lcs_parallel_rowblocks();
+    t4bis = t.stop();
+
     perfs.seq_naive = perfs.seq_naive + t1 / 2;
     perfs.seq_optim = perfs.seq_optim + t2 / 2;
     perfs.par_tiled = perfs.par_tiled + t3 / 2;
+    perfs.row_blocks = perfs.row_blocks + t3 / 2;
+    perfs.row_blocks_bis = perfs.row_blocks_bis + t3 / 2;
 
     return;
 }
