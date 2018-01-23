@@ -220,6 +220,10 @@ int main(int argc, char** argv){
             out_csv_lcs
     };
 
+    static task_scheduler_init
+            init(task_scheduler_init::deferred);
+
+    init.initialize(LCS_NUM_THREADS, UT_THREAD_DEFAULT_STACK_SIZE);
 
     tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {

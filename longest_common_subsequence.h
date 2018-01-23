@@ -8,7 +8,7 @@ using namespace std;
 #ifndef PARALLEL_STRATEGIES_TESTING_LARGEST_COMMON_SUBSEQUENCE_H
 #define PARALLEL_STRATEGIES_TESTING_LARGEST_COMMON_SUBSEQUENCE_H
 
-#define NTHREADS 16
+#define LCS_NUM_THREADS 16
 
 struct LCS_timedata {
     long pb_size;
