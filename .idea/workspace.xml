@@ -17,7 +17,7 @@
     <list default="true" id="ea13d18c-e694-43c9-93b3-3f713b2d593a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/longest_common_subsequence.cpp" afterPath="$PROJECT_DIR$/longest_common_subsequence.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.cpp" afterPath="$PROJECT_DIR$/main.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/longest_common_subsequence.h" afterPath="$PROJECT_DIR$/longest_common_subsequence.h" />
     </list>
     <ignored path="parallel_strategies_testing.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,13 +40,16 @@
       <file leaf-file-name="longest_common_subsequence.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/longest_common_subsequence.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="757">
-              <caret line="406" column="33" selection-start-line="406" selection-start-column="33" selection-end-line="406" selection-end-column="33" />
+            <state relative-caret-position="4253">
+              <caret line="503" column="44" selection-start-line="503" selection-start-column="44" selection-end-line="503" selection-end-column="44" />
               <folding>
                 <element signature="e#41#58#0" expanded="true" />
-                <element signature="e#3256#3313#0" expanded="true" />
-                <element signature="e#3653#3741#0" expanded="true" />
-                <element signature="e#4169#4226#0" expanded="true" />
+                <element signature="e#3328#3385#0" expanded="true" />
+                <element signature="e#3725#3813#0" expanded="true" />
+                <element signature="e#4241#4298#0" expanded="true" />
+                <element signature="e#7093#8294#1" expanded="false" />
+                <element signature="e#8298#8461#0" expanded="false" />
+                <element signature="e#8463#8645#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -55,10 +58,11 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="221" column="19" selection-start-line="221" selection-start-column="19" selection-end-line="221" selection-end-column="19" />
+            <state relative-caret-position="341">
+              <caret line="231" column="29" selection-start-line="231" selection-start-column="29" selection-end-line="231" selection-end-column="29" />
               <folding>
                 <element signature="e#56#75#0" expanded="true" />
+                <element signature="e#3468#6096#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -67,8 +71,8 @@
       <file leaf-file-name="longest_common_subsequence.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/longest_common_subsequence.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
+            <state relative-caret-position="657">
+              <caret line="59" column="5" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
               <folding>
                 <element signature="e#42#61#0" expanded="true" />
               </folding>
@@ -104,9 +108,9 @@
         <option value="$PROJECT_DIR$/Utils.h" />
         <option value="$PROJECT_DIR$/levenshtein.c" />
         <option value="$PROJECT_DIR$/levenshtein.pluto.c" />
+        <option value="$PROJECT_DIR$/main.cpp" />
         <option value="$PROJECT_DIR$/longest_common_subsequence.h" />
         <option value="$PROJECT_DIR$/longest_common_subsequence.cpp" />
-        <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
   </component>
@@ -412,7 +416,7 @@
       <workItem from="1516389123846" duration="3098000" />
       <workItem from="1516657649193" duration="3321000" />
       <workItem from="1516665778489" duration="5035000" />
-      <workItem from="1516829440810" duration="2716000" />
+      <workItem from="1516829440810" duration="5176000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1505236564061</created>
@@ -645,11 +649,18 @@
       <option name="project" value="LOCAL" />
       <updated>1516831324195</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Test longest common subsequence">
+      <created>1516832191755</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1516832191755</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="119728000" />
+    <option name="totallyTimeSpent" value="122188000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1920" height="1056" extended-state="6" />
@@ -661,7 +672,7 @@
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32985386" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.348643" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3841336" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32881" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -707,7 +718,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Initial commit" />
     <MESSAGE value="Gradient matrix example&#10;" />
     <MESSAGE value="Gradient matrix example with both strategies&#10;" />
     <MESSAGE value="Variations: linear size join, linear time, ..." />
@@ -732,7 +742,8 @@
     <MESSAGE value="On sorted array" />
     <MESSAGE value="Second test: parallel, reading columns&#10;" />
     <MESSAGE value="All tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="All tests" />
+    <MESSAGE value="Test longest common subsequence" />
+    <option name="LAST_COMMIT_MESSAGE" value="Test longest common subsequence" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -747,6 +758,7 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
+            <element signature="e#3468#6096#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -798,6 +810,7 @@
           <caret line="133" column="0" selection-start-line="133" selection-start-column="0" selection-end-line="133" selection-end-column="0" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
+            <element signature="e#3468#6096#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -841,6 +854,7 @@
           <caret line="89" column="21" selection-start-line="89" selection-start-column="21" selection-end-line="89" selection-end-column="21" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
+            <element signature="e#3468#6096#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -884,6 +898,7 @@
           <caret line="74" column="61" selection-start-line="74" selection-start-column="61" selection-end-line="74" selection-end-column="61" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
+            <element signature="e#3468#6096#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -927,6 +942,7 @@
           <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
+            <element signature="e#3468#6096#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1112,8 +1128,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/longest_common_subsequence.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
+        <state relative-caret-position="657">
+          <caret line="59" column="5" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
           <folding>
             <element signature="e#42#61#0" expanded="true" />
           </folding>
@@ -1122,23 +1138,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/longest_common_subsequence.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="757">
-          <caret line="406" column="33" selection-start-line="406" selection-start-column="33" selection-end-line="406" selection-end-column="33" />
+        <state relative-caret-position="4253">
+          <caret line="503" column="44" selection-start-line="503" selection-start-column="44" selection-end-line="503" selection-end-column="44" />
           <folding>
             <element signature="e#41#58#0" expanded="true" />
-            <element signature="e#3256#3313#0" expanded="true" />
-            <element signature="e#3653#3741#0" expanded="true" />
-            <element signature="e#4169#4226#0" expanded="true" />
+            <element signature="e#3328#3385#0" expanded="true" />
+            <element signature="e#3725#3813#0" expanded="true" />
+            <element signature="e#4241#4298#0" expanded="true" />
+            <element signature="e#7093#8294#1" expanded="false" />
+            <element signature="e#8298#8461#0" expanded="false" />
+            <element signature="e#8463#8645#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="221" column="19" selection-start-line="221" selection-start-column="19" selection-end-line="221" selection-end-column="19" />
+        <state relative-caret-position="341">
+          <caret line="231" column="29" selection-start-line="231" selection-start-column="29" selection-end-line="231" selection-end-column="29" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
+            <element signature="e#3468#6096#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -82,7 +82,9 @@ static void delete_aux_matrix(long** C, long m) {
     return;
 }
 
-inline void _lcs_kernel_reg_ (long bx, long ex, long by, long ey, long** C, char *X, char* Y){
+inline void _lcs_kernel_reg_ (long bx, long ex, long by, long ey, long** C,
+                              const char *X,
+                              const char* Y){
     long i,j;
     for(i = bx; i < ex; i++){
         for(j = by; j < ey; j++) {
@@ -194,7 +196,7 @@ long LCS::lcs_parallel_tiled(){
 
 void _lcs_super_kernel_linear_ (long start, long end, long n,
                                 long* C, long* Cs, long* Cp, bool* cnd,
-                                char* X, char* Y){
+                                const char* X, const char* Y){
     long i,j;
     long r0, r1, rs0, rs1;
     bool b;
@@ -367,6 +369,63 @@ long LCS::lcs_parallel_rowblocks_constjoin() {
     return lcsr.lcs.lcs;
 }
 
+
+// Last strategy : constant space sequential, diagonal traversal
+
+long _lcs_kernel_diag_(long n, long m, long dstart, long dend,
+                       const char* X, const char* Y){
+    long d = 0;
+    long c = 0;
+    long cstart, cend;
+    long cl, ml;
+    long local_lcs = 0;
+
+    for(d = dstart; d < dend; d++) {
+        cstart = max(0,d);
+        cend = min(n,n+d);
+        cl = 0;
+        ml = 0;
+        for(c = cstart; c < cend; c++){
+            cl = X[c - d] == Y[c] ? cl + 1 : 0;
+            ml = max(ml, cl);
+        }
+        local_lcs = max(ml, local_lcs);
+    }
+    return local_lcs;
+}
+
+long LCS::lcs_sequential_diag_fast() {
+    long n = X_size;
+    long m = Y_size;
+
+    return _lcs_kernel_diag_(n, m, -n+1, n, X, Y);
+}
+
+struct LcsReductionDiag{
+    char *X;
+    char *Y;
+    long n, m;
+    long lcs;
+
+    LcsReductionDiag(char* _X, char* _Y, long m, long n) : X(_X), Y(_Y), m(m), n(n), lcs(0) {}
+
+    LcsReductionDiag(LcsReductionDiag& s, split): X(s.X), Y(s.Y), m(s.m), n(s.n), lcs(0) {}
+
+    void operator()(const blocked_range<long>& r){
+        lcs = _lcs_kernel_diag_(n,m, r.begin(), r.end(), X, Y);
+    }
+
+    void join(LcsReductionDiag& rhs) {
+        lcs = lcs > rhs.lcs ? lcs : rhs.lcs;
+    }
+};
+
+long LCS::lcs_parallel_diag() {
+    LcsReductionDiag lcsr(X,Y,X_size,Y_size);
+    parallel_reduce(blocked_range<long>(-X_size + 1,X_size), lcsr);
+    return lcsr.lcs;
+}
+
 long LCS::longest_common_subsequence(int strategy){
 //    Strategy 1 : sequential naïve implementation
     switch (strategy) {
@@ -380,18 +439,23 @@ long LCS::longest_common_subsequence(int strategy){
             return lcs_parallel_rowblocks();
         case 4:
             return lcs_parallel_rowblocks_constjoin();
+        case 5:
+            return lcs_sequential_diag_fast();
+        case 6:
+            return lcs_parallel_diag();
         default:
+            cout << "/!\\ Strategies 0 - " << num_strategies - 1 <<endl;
             return 0L;
     }
 }
 
 void LCS::do_perf_update(int n) {
     StopWatch t;
-    double** times = new double*[5];
+    double** times = new double*[num_strategies];
 
     lcs_sequential_naive();
 
-    for(int j = 0; j < 5; j++) {
+    for(int j = 0; j < num_strategies; j++) {
         times[j] = new double[n];
         longest_common_subsequence(j);
         if(j <= 1){
@@ -421,7 +485,8 @@ void LCS::do_perf_update(int n) {
     perfs.par_tiled = mean(times[2],n);
     perfs.row_blocks = mean(times[3],n);
     perfs.row_blocks_bis = mean(times[4],n);
-
+    perfs.seq_diag = mean(times[5], n);
+    perfs.par_diag = mean(times[6], n);
     print_perfs();
 
     return;
@@ -432,9 +497,11 @@ void LCS::print_perfs() {
     cout << "-------------------------" << endl;
     cout << "Sequential: " << perfs.seq_naive << endl;
     cout << "Seq optim : " << perfs.seq_optim << endl;
+    cout << "Seq scalar: " << perfs.seq_diag << endl;
     cout << "Par. tiled: " << perfs.par_tiled << endl;
     cout << "Row blocks: " << perfs.row_blocks << endl;
     cout << "Rows const: " << perfs.row_blocks_bis << endl;
+    cout << "Par scalar: " << perfs.par_diag << endl;
 }
 
 void LCS::init_perfs() {
