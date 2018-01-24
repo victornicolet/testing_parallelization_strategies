@@ -202,17 +202,24 @@ int main(int argc, char** argv){
     out_csv_lcs.open("parallel_strategies_test_lcs.csv");
 
 
-    int nsizes = 2;
+    if(argc < 4){
+        cout << "Usage: $./parallel_strategies_testing [number of test sizes] [start size (power of two)]"
+             << " [increment]" << endl;
+        return -1;
+    }
+
+    int nsizes = atoi(argv[2]);
     iter_type* pb_sizes = new iter_type[nsizes];
-    int start_pow2_size = 10;
+    int start_pow2_size = atoi(argv[2]);
+    int increment = atoi(argv[3]);
 
     for (int j = 0; j < nsizes; ++j) {
-        pb_sizes[j] = (1 << start_pow2_size) + 10000 * j;
+        pb_sizes[j] = (1 << start_pow2_size) + increment * j;
     }
 
 
     test_params tp = {
-            2,
+            nsizes,
             pb_sizes,
             "performance of tiled lcs vs. sequential optim",
             TESTS_NUM,

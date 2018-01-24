@@ -394,11 +394,25 @@ void LCS::do_perf_update(int n) {
     for(int j = 0; j < 5; j++) {
         times[j] = new double[n];
         longest_common_subsequence(j);
-
-        for (int i = 0; i < n; i++) {
+        if(j <= 1){
+//            Measure only twice sequential times
+            double tm = 0.;
             t.start();
             longest_common_subsequence(j);
-            times[j][i] = t.stop();
+            tm = t.stop();
+            t.start();
+            longest_common_subsequence(j);
+            tm = (tm + t.stop()) / 2;
+            for (int i = 0; i < n; i++) {
+                times[j][i] = tm;
+            }
+
+        } else {
+            for (int i = 0; i < n; i++) {
+                t.start();
+                longest_common_subsequence(j);
+                times[j][i] = t.stop();
+            }
         }
     }
 
