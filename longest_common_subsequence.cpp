@@ -19,6 +19,14 @@ static char GenerateRandomChar() {
     return (char) 'A' + rand()%24;
 }
 
+static double mean(double* a, int n) {
+    double mean = 0.0;
+    for (int i = 0; i < n; i++) {
+        mean += a[i];
+    }
+    return (double) (mean / n);
+}
+
 static long max(long a, long b){
     return a > b ? a : b;
 }
@@ -126,6 +134,7 @@ long LCS::lcs_sequential_fast(){
         }
     }
     lcs = C[n];
+    delete [] C;
     return lcs;
 }
 
@@ -342,7 +351,6 @@ struct LcsReductionConstJoin {
 
     void join(LcsReductionConstJoin& rhs) {
         cnd[0] = true;
-        lcs = rhs.lcs;
     }
 };
 
@@ -362,50 +370,43 @@ long LCS::lcs_parallel_rowblocks_constjoin() {
 long LCS::longest_common_subsequence(int strategy){
 //    Strategy 1 : sequential naïve implementation
     switch (strategy) {
-        case 1:
+        case 0:
             return lcs_sequential_naive();
-        case 2:
+        case 1:
             return lcs_sequential_fast();
-        case 3:
+        case 2:
             return lcs_parallel_tiled();
-        case 4:
+        case 3:
             return lcs_parallel_rowblocks();
-        case 5:
+        case 4:
             return lcs_parallel_rowblocks_constjoin();
         default:
             return 0L;
     }
 }
 
-void LCS::do_perf_update() {
+void LCS::do_perf_update(int n) {
     StopWatch t;
-    double t1,t2,t3, t4, t4bis;
+    double** times = new double*[5];
 
-    t.start();
     lcs_sequential_naive();
-    t1 = t.stop();
 
-    t.start();
-    lcs_sequential_fast();
-    t2 = t.stop();
+    for(int j = 0; j < 5; j++) {
+        times[j] = new double[n];
+        longest_common_subsequence(j);
 
-    t.start();
-    lcs_parallel_tiled();
-    t3 = t.stop();
+        for (int i = 0; i < n; i++) {
+            t.start();
+            longest_common_subsequence(j);
+            times[j][i] = t.stop();
+        }
+    }
 
-    t.start();
-    lcs_parallel_rowblocks();
-    t4 = t.stop();
-
-    t.start();
-    lcs_parallel_rowblocks_constjoin();
-    t4bis = t.stop();
-
-    perfs.seq_naive = perfs.seq_naive + t1 / 2;
-    perfs.seq_optim = perfs.seq_optim + t2 / 2;
-    perfs.par_tiled = perfs.par_tiled + t3 / 2;
-    perfs.row_blocks = perfs.row_blocks + t4 / 2;
-    perfs.row_blocks_bis = perfs.row_blocks_bis + t4bis / 2;
+    perfs.seq_naive = mean(times[0], n);
+    perfs.seq_optim = mean(times[1],n);
+    perfs.par_tiled = mean(times[2],n);
+    perfs.row_blocks = mean(times[3],n);
+    perfs.row_blocks_bis = mean(times[4],n);
 
     print_perfs();
 
@@ -422,11 +423,12 @@ void LCS::print_perfs() {
     cout << "Rows const: " << perfs.row_blocks_bis << endl;
 }
 
-void LCS::measure_perfs(int n){
-    int i;
-    for (i = 0; i < n; ++i) {
-        do_perf_update();
-    }
+void LCS::init_perfs() {
+    perfs = {0,0,0,0,0};
+}
 
+void LCS::measure_perfs(int n){
+    init_perfs();
+    do_perf_update(n);
     return;
 };

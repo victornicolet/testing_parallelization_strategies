@@ -3,12 +3,13 @@
 //
 
 #include <iostream>
+#include "omp.h"
 using namespace std;
 
 #ifndef PARALLEL_STRATEGIES_TESTING_LARGEST_COMMON_SUBSEQUENCE_H
 #define PARALLEL_STRATEGIES_TESTING_LARGEST_COMMON_SUBSEQUENCE_H
 
-#define LCS_NUM_THREADS 16
+#define LCS_NUM_THREADS 4
 
 struct LCS_timedata {
     long pb_size;
@@ -37,7 +38,7 @@ class LCS {
     long lcs_parallel_tiled();
     long lcs_parallel_rowblocks();
     long lcs_parallel_rowblocks_constjoin();
-    void do_perf_update();
+    void do_perf_update(int n);
     void print_perfs();
 
 public:
@@ -45,7 +46,12 @@ public:
     LCS(char* x, char* y, long m, long n) : X(x),Y(y), X_size(m), Y_size(n) {}
     long longest_common_subsequence(int strategy);
     void measure_perfs(int n);
+    void init_perfs();
     LCS_timedata get_perfs() { return perfs; }
+    ~LCS(){
+        delete X;
+        delete Y;
+    }
 };
 
 

@@ -233,4 +233,6 @@ int main(int argc, char** argv){
         csvline(tp.out, tmd);
     }
 
+    out_csv_lcs.close();
+
 }
