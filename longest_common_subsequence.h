@@ -23,8 +23,8 @@ struct LCS_timedata {
 };
 
 static void csvline(ostream& out, LCS_timedata tdm){
-    out << tdm.pb_size << "," << tdm.seq_naive << "," << tdm.seq_optim << "," << tdm.par_tiled << ","
-        << tdm.row_blocks << "," << tdm.row_blocks_bis << endl;
+    out << tdm.pb_size << "," << tdm.seq_naive << "," << tdm.seq_optim << "," << tdm.seq_diag << ","
+        << tdm.par_tiled << "," << tdm.row_blocks << "," << tdm.row_blocks_bis << "," << tdm.par_diag << endl;
 }
 
 class LCS {

@@ -173,7 +173,7 @@ long LCS::lcs_parallel_tiled(){
         printf("Diagonal %ld, first cell %ld, last cell %ld\n", diagnum, first_cell, last_cell);
 #endif
 
-#pragma parallel for num_threads(LCS_NUM_THREADS)
+#pragma omp parallel for num_threads(LCS_NUM_THREADS)
         for(cellnum = first_cell; cellnum <= last_cell; cellnum++ ) {
 //            Tile kernel
             long bx = max(1,(diagnum - cellnum)*TILE_SIZE );
