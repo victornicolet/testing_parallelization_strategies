@@ -199,7 +199,7 @@ int _main(int argc, char** argv) {
 
 int main(int argc, char** argv){
     ofstream out_csv_lcs;
-    out_csv_lcs.open("parallel_strategies_test_lcs.csv");
+    out_csv_lcs.open("parallel_strategies_test_lcs.csv", ofstream::app | ofstream::out);
 
 
     if(argc < 4){
@@ -231,7 +231,6 @@ int main(int argc, char** argv){
 
     init.initialize(LCS_NUM_THREADS, UT_THREAD_DEFAULT_STACK_SIZE);
 
-    tp.out << tp.test_names << endl;
     for (int i = 0; i < tp.nsizes; ++i) {
         long pbsize = tp.pb_sizes[i];
         LCS lcs(pbsize, pbsize);

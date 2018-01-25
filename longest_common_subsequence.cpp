@@ -505,7 +505,7 @@ void LCS::print_perfs() {
 }
 
 void LCS::init_perfs() {
-    perfs = {0,0,0,0,0};
+    perfs = {X_size,0,0,0,0};
 }
 
 void LCS::measure_perfs(int n){
