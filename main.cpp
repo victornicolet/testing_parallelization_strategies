@@ -10,7 +10,7 @@
 #include "Gradient_matrix_variations.h"
 #include "ExamplesTaskBased.h"
 #include "longest_common_subsequence.h"
-#include "TestDepFlowGraph.h"
+#include "MaxTopRightRectangle.h"
 #define TESTS_NUM 40
 
 
@@ -197,7 +197,8 @@ int _main(int argc, char** argv) {
     return 0;
 }
 
-int main(int argc, char** argv){
+
+int lcs_experiment(int argc, char ** argv){
     ofstream out_csv_lcs;
     out_csv_lcs.open("parallel_strategies_test_lcs.csv", ofstream::app | ofstream::out);
 
@@ -241,4 +242,37 @@ int main(int argc, char** argv){
 
     out_csv_lcs.close();
 
+}
+
+int experiment_mtrr(long n, long m){
+    ofstream out_csv_lcs;
+    out_csv_lcs.open("parallel_strategies_test_mtrr.csv", ofstream::app | ofstream::out);
+
+    int num_thread_exps = 13;
+    int threads[13] = {1,2,3,4,5,6,7,8,12,16,20,24,32};
+
+    MaxTopRightRectangle maxTRR(m,n);
+
+    static task_scheduler_init
+            init(task_scheduler_init::deferred);
+
+    for(int i  = 0; i < num_thread_exps; i++){
+
+        init.initialize(threads[i], UT_THREAD_DEFAULT_STACK_SIZE);
+        maxTRR.run_exp(threads[i], 1, 5, 5);
+        init.terminate();
+    }
+    maxTRR.output(out_csv_lcs);
+    out_csv_lcs.close();
+
+}
+
+int main(int argc, char** argv) {
+    int basesize = 4096;
+    int increment = 4096;
+    for(int i = 0; i < 10; i++){
+        for(int j = 0; j < 10; j++) {
+            experiment_mtrr(basesize + j * increment, basesize + i * increment);
+        }
+    }
 }
