@@ -35,7 +35,7 @@ public:
         A = new int*[n];
         for(long i = 0; i < n; i++){
             A[i] = new int[m];
-            cout << "\r" << (i * 100 / n) << "%";
+            cout << "\r" << (i * 100/ n) + 1 << "%";
             for(long j = 0; j < m; j++){
                 A[i][j] = (rand() % DATA_RANGE) - (DATA_RANGE / 2);
             }

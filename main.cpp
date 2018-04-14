@@ -269,9 +269,9 @@ int experiment_mtrr(long n, long m){
 
 int main(int argc, char** argv) {
     int basesize = 4096;
-    int increment = 4096;
-    for(int i = 0; i < 10; i++){
-        for(int j = 0; j < 10; j++) {
+    int increment = 2048;
+    for(int i = 0; i < 20; i++){
+        for(int j = 0; j < 20; j++) {
             experiment_mtrr(basesize + i * increment, basesize + j * increment);
         }
     }

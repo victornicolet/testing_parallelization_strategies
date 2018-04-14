@@ -32,6 +32,23 @@ for i in [1,2,3,4,5,6,7,8,12,16,20,24,32]:
     plot_df(df, i, range_one)
 
 
+def plot_speedups():
+    df = data.loc[data['height'] == 20480].drop(['height'], axis=1)
+    df.groupby(['width']).mean()
+    df['speedup_split'] = df.apply(lambda x: x['sequential'] / x['split'], axis=1)
+    df['speedup_fused'] = df.apply(lambda x: x['sequential'] / x['fused'], axis=1)
+    df = df.drop(['sequential', 'split', 'fused'], axis=1)
+    df = df.reset_index()
 
+    for width in [4096, 8192, 12288, 16384]: #,20480,24576,28672,32768]
+        plt.clf()
+        dfi = df.loc[df['width'] == width].drop(['width'], axis=1)
+        plt.plot(dfi['threads'], dfi['speedup_split'])
+        plt.plot(dfi['threads'], dfi['speedup_fused'])
+        plt.show()
+        plt.title("Speedup of split and fused for different row sizes, 20480 rows x %d." % width)
+
+
+# plot_speedups()
 
 

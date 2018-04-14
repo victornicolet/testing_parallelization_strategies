@@ -2,3 +2,8 @@ venv
 
 cmake-build-debug
 .idea
+CMakeFiles
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+parallel_strategies_testing

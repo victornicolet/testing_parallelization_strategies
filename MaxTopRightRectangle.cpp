@@ -37,13 +37,13 @@ void _mtrr_par_split_kernel(int** A, int* col, int* mtsj, int& mtrr, long m, lon
         rmr = 0;
 
 //         Rightwards original loop
-        for(j = 0; j < m; j++){
+        for(long j = 0; j < m; j++){
             col[j] += A[i][j];
             rmr = max(col[j] + rmr, 0);
         }
 //        Leftwards auxiliary loop
         sumcol = 0;
-        for(j = m-1; j >= 0; j--){
+        for(long j = m-1; j >= 0; j--){
             sumcol += col[j];
             mtsj[j] = max(sumcol, mtsj[j]);
         }
@@ -56,12 +56,12 @@ void _mtrr_par_fused_kernel(int** A, int* col, int* mtsj, int& mtrr, long m, lon
     int rmr = 0;
     int sumcol = 0;
 
-    long i,j;
+    long i;
     for(i = i0; i < iend; i++){
         rmr = 0;
 //        Leftwards auxiliary loop + fused original loop
         sumcol = 0;
-        for(j = m-1; j >= 0; j--){
+        for(long j = m-1; j >= 0; j--){
             col[j] += A[i][j];
             sumcol += col[j];
             rmr = max(sumcol, rmr);
