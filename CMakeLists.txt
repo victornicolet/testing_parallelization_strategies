@@ -11,4 +11,10 @@ set(SOURCE_FILES main.cpp Stopwatch.cpp Utils.cpp Utils.h Gradient_matrix.cpp
         MaxTopStrip.h TestDepFlowGraph.cpp TestDepFlowGraph.h
         longest_common_subsequence.cpp longest_common_subsequence.h MaxTopRightRectangle.cpp MaxTopRightRectangle.h)
 
+OPTION(DEFINE_MTRR_LWD_AUX "Compile wrong version with leftwards auxiliary for MTRR" OFF)
+
+IF(DEFINE_MTRR_LWD_AUX)
+    add_definitions(-DMTRR_LEFTWARDS_AUX)
+ENDIF(DEFINE_MTRR_LWD_AUX)
+
 add_executable(parallel_strategies_testing ${SOURCE_FILES})

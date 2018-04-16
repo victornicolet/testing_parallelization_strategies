@@ -246,8 +246,11 @@ int lcs_experiment(int argc, char ** argv){
 
 int experiment_mtrr(long n, long m){
     ofstream out_csv_lcs;
+#ifndef MTRR_LEFTWARDS_AUX
     out_csv_lcs.open("parallel_strategies_test_mtrr.csv", ofstream::app | ofstream::out);
-
+#else
+    out_csv_lcs.open("parallel_strategies_test_mtrr_aux.csv", ofstream::app | ofstream::out);
+#endif
     int num_thread_exps = 13;
     int threads[13] = {1,2,3,4,5,6,7,8,12,16,20,24,32};
 
@@ -259,7 +262,7 @@ int experiment_mtrr(long n, long m){
     for(int i  = 0; i < num_thread_exps; i++){
 
         init.initialize(threads[i], UT_THREAD_DEFAULT_STACK_SIZE);
-        maxTRR.run_exp(threads[i], 1, 5, 5);
+        maxTRR.run_exp(threads[i], 0, 5, 5);
         init.terminate();
     }
     maxTRR.output(out_csv_lcs);
@@ -270,7 +273,7 @@ int experiment_mtrr(long n, long m){
 int main(int argc, char** argv) {
     int basesize = 4096;
     int increment = 2048;
-    for(int i = 0; i < 20; i++){
+    for(int i = 0; i < 19; i++){
         for(int j = 0; j < 20; j++) {
             experiment_mtrr(basesize + i * increment, basesize + j * increment);
         }

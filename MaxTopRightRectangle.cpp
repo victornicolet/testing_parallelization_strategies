@@ -30,23 +30,34 @@ void _mtrr_seq_kernel_ (int** A, int* col, int& mtrr, long m, long i0, long iend
 
 void _mtrr_par_split_kernel(int** A, int* col, int* mtsj, int& mtrr, long m, long i0, long iend){
     int rmr = 0;
-    int sumcol = 0;
+    int col_sums;
 
-    long i,j;
-    for(i = i0; i < iend; i++){
+    int** _a = A;
+
+    for(long i = i0; i < iend; i++){
         rmr = 0;
 
 //         Rightwards original loop
         for(long j = 0; j < m; j++){
-            col[j] += A[i][j];
+            col[j] += _a[i][j];
             rmr = max(col[j] + rmr, 0);
         }
+
+#ifndef MTRR_LEFTWARDS_AUX
 //        Leftwards auxiliary loop
-        sumcol = 0;
+        col_sums = 0;
         for(long j = m-1; j >= 0; j--){
-            sumcol += col[j];
-            mtsj[j] = max(sumcol, mtsj[j]);
+            col_sums += col[j];
+            mtsj[j] = max(col_sums, mtsj[j]);
         }
+#else
+// Experiment with both loops in the same direction.
+        col_sums = 0;
+        for(long j = 0; j < m; j++){
+            col_sums += col[j];
+            mtsj[j] = max(col_sums, mtsj[j]);
+        }
+#endif
 
         mtrr = max(rmr, mtrr);
     }

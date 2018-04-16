@@ -6,6 +6,9 @@ import numpy as np
 import pandas as pd
 
 data = pd.read_csv(sys.argv[1])
+suffix=""
+if len(sys.argv) > 2:
+    suffix = sys.argv[2]
 
 def plot_df(df, ncores, range_one):
     heatmap = plt.pcolor(df, cmap='RdBu', vmin=1-range_one, vmax=1 + range_one)
@@ -14,7 +17,7 @@ def plot_df(df, ncores, range_one):
     plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
     leg = plt.colorbar(heatmap)
     leg.ax.set_ylabel("Elapsed time split / fused, height vertical.")
-    plt.savefig("figures/mtrr_heatmap_%s_threads" % ncores)
+    plt.savefig("figures/mtrr_heatmap_%s_threads%s" % (ncores, suffix))
     plt.clf()
 
 

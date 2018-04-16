@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="parallel_strategies_testing"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/victorn/CLionProjects/testing_parallelization_strategies"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/victorn/CLionProjects/testing_parallelization_strategies"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/victorn/CLionProjects/testing_parallelization_strategies"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="parallel_strategies_testing">
+				<Option output="/home/victorn/CLionProjects/testing_parallelization_strategies/parallel_strategies_testing" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/victorn/CLionProjects/testing_parallelization_strategies"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 parallel_strategies_testing"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="parallel_strategies_testing/fast">
+				<Option output="/home/victorn/CLionProjects/testing_parallelization_strategies/parallel_strategies_testing" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/victorn/CLionProjects/testing_parallelization_strategies"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 parallel_strategies_testing/fast"/>
+					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/ExamplesTaskBased.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/ExamplesTaskBased.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix_variations.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix_variations.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Image.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Image.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopRightRectangle.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopRightRectangle.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopStrip.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopStrip.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Stopwatch.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Stopwatch.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/TestDepFlowGraph.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/TestDepFlowGraph.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Utils.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Utils.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/longest_common_subsequence.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/longest_common_subsequence.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/main.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
