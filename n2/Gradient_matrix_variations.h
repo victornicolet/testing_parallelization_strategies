@@ -5,7 +5,7 @@
 #ifndef PARALLEL_STRATEGIES_TESTING_GRADIENT_MATRIX_VARIATIONS_H
 #define PARALLEL_STRATEGIES_TESTING_GRADIENT_MATRIX_VARIATIONS_H
 
-#include "Utils.h"
+#include "../Utils.h"
 
 class Gradient_matrix_variations {
 public:

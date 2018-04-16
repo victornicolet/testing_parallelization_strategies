@@ -7,7 +7,7 @@
 #include <cstdio>
 #include "longest_common_subsequence.h"
 #include <time.h>
-#include "Stopwatch.h"
+#include "../Stopwatch.h"
 
 
 #define TILE_SIZE 1024

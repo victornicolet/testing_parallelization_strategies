@@ -4,7 +4,7 @@
 
 #ifndef PARALLEL_STRATEGIES_TESTING_MAXTOPSTRIP_H
 #define PARALLEL_STRATEGIES_TESTING_MAXTOPSTRIP_H
-#include "Utils.h"
+#include "../Utils.h"
 
 result_data topMaxStripStrategyComparison(data_type**, result_data, test_params);
 

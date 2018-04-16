@@ -5,12 +5,12 @@
 #include <unistd.h>
 #include <fstream>
 #include "Utils.h"
-#include "MaxTopStrip.h"
-#include "Gradient_matrix.h"
-#include "Gradient_matrix_variations.h"
+#include "n2/MaxTopStrip.h"
+#include "n2/Gradient_matrix.h"
+#include "n2/Gradient_matrix_variations.h"
 #include "ExamplesTaskBased.h"
-#include "longest_common_subsequence.h"
-#include "MaxTopRightRectangle.h"
+#include "n2/longest_common_subsequence.h"
+#include "n2/MaxTopRightRectangle.h"
 #define TESTS_NUM 40
 
 
@@ -247,9 +247,9 @@ int lcs_experiment(int argc, char ** argv){
 int experiment_mtrr(long n, long m){
     ofstream out_csv_lcs;
 #ifndef MTRR_LEFTWARDS_AUX
-    out_csv_lcs.open("parallel_strategies_test_mtrr.csv", ofstream::app | ofstream::out);
+    out_csv_lcs.open("data/parallel_strategies_test_mtrr.csv", ofstream::app | ofstream::out);
 #else
-    out_csv_lcs.open("parallel_strategies_test_mtrr_aux.csv", ofstream::app | ofstream::out);
+    out_csv_lcs.open("data/parallel_strategies_test_mtrr_aux.csv", ofstream::app | ofstream::out);
 #endif
     int num_thread_exps = 13;
     int threads[13] = {1,2,3,4,5,6,7,8,12,16,20,24,32};

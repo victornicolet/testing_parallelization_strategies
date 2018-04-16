@@ -43,7 +43,9 @@
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
-				<Compiler/>
+				<Compiler>
+					<Add option="-DMTRR_LEFTWARDS_AUX"/>
+				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 parallel_strategies_testing"/>
 					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
@@ -57,7 +59,9 @@
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
-				<Compiler/>
+				<Compiler>
+					<Add option="-DMTRR_LEFTWARDS_AUX"/>
+				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 parallel_strategies_testing/fast"/>
 					<CompileFile command="/usr/bin/make -f &quot;/home/victorn/CLionProjects/testing_parallelization_strategies/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
@@ -72,34 +76,10 @@
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/ExamplesTaskBased.h">
 			<Option target="parallel_strategies_testing"/>
 		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix.cpp">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix.h">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix_variations.cpp">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Gradient_matrix_variations.h">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Image.cpp">
 			<Option target="parallel_strategies_testing"/>
 		</Unit>
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Image.h">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopRightRectangle.cpp">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopRightRectangle.h">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopStrip.cpp">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/MaxTopStrip.h">
 			<Option target="parallel_strategies_testing"/>
 		</Unit>
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Stopwatch.cpp">
@@ -120,13 +100,37 @@
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/Utils.h">
 			<Option target="parallel_strategies_testing"/>
 		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/longest_common_subsequence.cpp">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
-		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/longest_common_subsequence.h">
-			<Option target="parallel_strategies_testing"/>
-		</Unit>
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/main.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/Gradient_matrix.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/Gradient_matrix.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/Gradient_matrix_variations.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/Gradient_matrix_variations.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/MaxTopRightRectangle.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/MaxTopRightRectangle.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/MaxTopStrip.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/MaxTopStrip.h">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/longest_common_subsequence.cpp">
+			<Option target="parallel_strategies_testing"/>
+		</Unit>
+		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/n2/longest_common_subsequence.h">
 			<Option target="parallel_strategies_testing"/>
 		</Unit>
 		<Unit filename="/home/victorn/CLionProjects/testing_parallelization_strategies/CMakeLists.txt">

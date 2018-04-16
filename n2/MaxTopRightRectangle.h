@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#include "Utils.h"
+#include "../Utils.h"
 
 
 #define mTRR_NUM_THREADS 32

@@ -3,8 +3,8 @@
 //
 
 #include "Gradient_matrix_variations.h"
-#include "Stopwatch.h"
-#include "Utils.h"
+#include "../Stopwatch.h"
+#include "../Utils.h"
 #include <tbb/tbb.h>
 
 using namespace tbb;

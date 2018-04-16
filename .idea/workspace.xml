@@ -15,24 +15,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea13d18c-e694-43c9-93b3-3f713b2d593a" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MaxTopRightRectangle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/MaxTopRightRectangle.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_12_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_12_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_16_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_16_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_1_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_1_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_20_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_20_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_24_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_24_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_2_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_2_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_32_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_32_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_3_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_3_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_4_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_4_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_6_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_6_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_7_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_7_threads.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/mtrr_heatmap_8_threads.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/mtrr_heatmap_8_threads.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gradient_matrix.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gradient_matrix.h" beforeDir="false" afterPath="$PROJECT_DIR$/n2/Gradient_matrix.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gradient_matrix_variations.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gradient_matrix_variations.h" beforeDir="false" afterPath="$PROJECT_DIR$/n2/Gradient_matrix_variations.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MaxTopRightRectangle.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MaxTopRightRectangle.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MaxTopStrip.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MaxTopStrip.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/levenshtein.pluto.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/levenshtein.pluto.cloog" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/longest_common_subsequence.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/longest_common_subsequence.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/parallel_strategies_test_mtrr.csv" beforeDir="false" afterPath="$PROJECT_DIR$/parallel_strategies_test_mtrr.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_max_top_right_rectangle.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_max_top_right_rectangle.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/parallel_strategies_testing.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/parallel_strategies_testing.cbp" afterDir="false" />
     </list>
     <ignored path="parallel_strategies_testing.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -55,9 +54,9 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="longest_common_subsequence.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/longest_common_subsequence.cpp">
+        <entry file="file://$PROJECT_DIR$/n2/longest_common_subsequence.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
+            <state relative-caret-position="6840">
               <caret line="511" column="17" selection-start-line="511" selection-start-column="17" selection-end-line="511" selection-end-column="17" />
               <folding>
                 <element signature="e#41#58#0" expanded="true" />
@@ -72,13 +71,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot_max_top_right_rectangle.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plot_max_top_right_rectangle.py">
+      <file leaf-file-name="MaxTopRightRectangle.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/n2/MaxTopRightRectangle.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+            <state relative-caret-position="1665">
+              <caret line="116" column="8" selection-start-line="116" selection-start-column="8" selection-end-line="116" selection-end-column="8" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#42#75#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,34 +86,41 @@
       <file leaf-file-name="main.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="279" column="5" selection-start-line="279" selection-start-column="5" selection-end-line="279" selection-end-column="5" />
+            <state relative-caret-position="181">
+              <caret line="249" column="27" selection-start-line="249" selection-start-column="27" selection-end-line="249" selection-end-column="27" />
               <folding>
                 <element signature="e#56#75#0" expanded="true" />
                 <element signature="e#3468#6096#0" />
-                <element signature="e#7497#7582#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mtrr.sh" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mtrr.sh">
+      <file leaf-file-name="MaxTopRightRectangle.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/n2/MaxTopRightRectangle.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            <state relative-caret-position="120">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MaxTopRightRectangle.cpp" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MaxTopRightRectangle.cpp">
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="49">
-              <caret line="32" column="17" selection-start-line="32" selection-start-column="17" selection-end-line="32" selection-end-column="17" />
+            <state relative-caret-position="120">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="longest_common_subsequence.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/n2/longest_common_subsequence.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
               <folding>
-                <element signature="e#42#75#0" expanded="true" />
-                <element signature="e#1409#1552#0" expanded="true" />
+                <element signature="e#42#61#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -129,11 +135,32 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MaxTopRightRectangle.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MaxTopRightRectangle.h">
+      <file leaf-file-name="Gradient_matrix.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="1200">
+              <caret line="81" selection-start-line="81" selection-end-line="102" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gradient_matrix.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="47" selection-start-line="1" selection-start-column="47" selection-end-line="1" selection-end-column="47" />
+              <folding>
+                <element signature="e#110#135#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gradient_matrix_variations.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix_variations.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -192,6 +219,10 @@
         <option value="$PROJECT_DIR$/mtrr.sh" />
         <option value="$PROJECT_DIR$/MaxTopRightRectangle.cpp" />
         <option value="$PROJECT_DIR$/parallel_strategies_test_mtrr_aux.csv" />
+        <option value="$PROJECT_DIR$/n2/Gradient_matrix.h" />
+        <option value="$PROJECT_DIR$/n2/Gradient_matrix_variations.h" />
+        <option value="$PROJECT_DIR$/n2/MaxTopRightRectangle.h" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/main.cpp" />
       </list>
     </option>
@@ -229,7 +260,7 @@
             <path>
               <item name="parallel_strategies_testing" type="b2602c69:ProjectViewProjectNode" />
               <item name="testing_parallelization_strategies" type="462c0819:PsiDirectoryNode" />
-              <item name="cmake-build-debug" type="462c0819:PsiDirectoryNode" />
+              <item name="n2" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -243,6 +274,11 @@
     <property name="ignore_missing_gitignore" value="true" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/n2" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -477,7 +513,7 @@
       <workItem from="1516829440810" duration="16289000" />
       <workItem from="1519069035380" duration="48000" />
       <workItem from="1523629851993" duration="816000" />
-      <workItem from="1523630685030" duration="31237000" />
+      <workItem from="1523630685030" duration="32371000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1505236564061</created>
@@ -749,7 +785,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="165402000" />
+    <option name="totallyTimeSpent" value="166536000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="-11" width="1682" height="1062" extended-state="6" />
@@ -758,10 +794,10 @@
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17023809" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Messages" order="7" weight="0.27730194" />
-      <window_info anchor="bottom" id="CMake" order="11" visible="true" weight="0.32976446" />
+      <window_info anchor="bottom" id="CMake" order="11" weight="0.32976446" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32985386" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.28479657" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.28479657" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32881" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -825,13 +861,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="198" selection-start-line="7" selection-start-column="198" selection-end-line="7" selection-end-column="198" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Utils.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1558">
@@ -846,7 +875,6 @@
           <folding>
             <element signature="e#56#75#0" expanded="true" />
             <element signature="e#3468#6096#0" />
-            <element signature="e#7497#7582#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -879,7 +907,6 @@
           <folding>
             <element signature="e#56#75#0" expanded="true" />
             <element signature="e#3468#6096#0" />
-            <element signature="e#7497#7582#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -912,12 +939,11 @@
           <folding>
             <element signature="e#56#75#0" expanded="true" />
             <element signature="e#3468#6096#0" />
-            <element signature="e#7497#7582#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gradient_matrix.h">
+    <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="14" selection-start-line="14" selection-end-line="14" />
@@ -931,7 +957,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gradient_matrix.cpp">
+    <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="17" selection-start-line="17" selection-end-line="17" />
@@ -959,13 +985,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gradient_matrix_variations.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="88" selection-start-line="12" selection-start-column="88" selection-end-line="12" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Iamge.cpp" />
     <entry file="file://$PROJECT_DIR$/Iamge.h" />
     <entry file="file://$PROJECT_DIR$/Image.cpp">
@@ -975,7 +994,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MaxTopStrip.h">
+    <entry file="file://$PROJECT_DIR$/n2/MaxTopStrip.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
           <caret line="8" selection-start-line="8" selection-end-line="8" />
@@ -1005,13 +1024,6 @@
     </entry>
     <entry file="file://$USER_HOME$/tools/tbb/include/tbb/internal/_flow_graph_impl.h" />
     <entry file="file://$USER_HOME$/tools/tbb/include/tbb/flow_graph.h" />
-    <entry file="file://$PROJECT_DIR$/Gradient_matrix.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ExamplesTaskBased.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10640">
@@ -1026,28 +1038,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gradient_matrix.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1539">
-          <caret line="81" selection-start-line="81" selection-end-line="102" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MaxTopStrip.cpp">
+    <entry file="file://$PROJECT_DIR$/n2/MaxTopStrip.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
           <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gradient_matrix_variations.cpp">
+    <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix_variations.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2109">
           <caret line="111" selection-start-line="111" selection-end-line="111" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/levenshtein.pluto.c">
+    <entry file="file://$PROJECT_DIR$/n2/levenshtein.pluto.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="532">
           <caret line="73" column="26" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
@@ -1089,16 +1094,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/longest_common_subsequence.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="33" column="12" lean-forward="true" selection-start-line="33" selection-start-column="12" selection-end-line="33" selection-end-column="12" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cmake-build-debug/parallel_strategies_test_lcs.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1109,54 +1104,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_max_top_right_rectangle.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/longest_common_subsequence.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="511" column="17" selection-start-line="511" selection-start-column="17" selection-end-line="511" selection-end-column="17" />
-          <folding>
-            <element signature="e#41#58#0" expanded="true" />
-            <element signature="e#3328#3385#0" expanded="true" />
-            <element signature="e#3725#3813#0" expanded="true" />
-            <element signature="e#4245#4302#0" expanded="true" />
-            <element signature="e#7097#8298#1" />
-            <element signature="e#8302#8465#0" />
-            <element signature="e#8467#8649#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mtrr.sh">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
           <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MaxTopRightRectangle.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="49">
-          <caret line="32" column="17" selection-start-line="32" selection-start-column="17" selection-end-line="32" selection-end-column="17" />
-          <folding>
-            <element signature="e#42#75#0" expanded="true" />
-            <element signature="e#1409#1552#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1174,21 +1125,104 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MaxTopRightRectangle.h">
+    <entry file="file://$PROJECT_DIR$/plot_max_top_right_rectangle.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="120">
+          <caret line="8" column="9" selection-start-line="8" selection-start-column="9" selection-end-line="8" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="28" selection-start-line="16" selection-start-column="28" selection-end-line="16" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="81" selection-start-line="81" selection-end-line="102" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="47" selection-start-line="1" selection-start-column="47" selection-end-line="1" selection-end-column="47" />
+          <folding>
+            <element signature="e#110#135#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/Gradient_matrix_variations.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/longest_common_subsequence.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6840">
+          <caret line="511" column="17" selection-start-line="511" selection-start-column="17" selection-end-line="511" selection-end-column="17" />
+          <folding>
+            <element signature="e#41#58#0" expanded="true" />
+            <element signature="e#3328#3385#0" expanded="true" />
+            <element signature="e#3725#3813#0" expanded="true" />
+            <element signature="e#4245#4302#0" expanded="true" />
+            <element signature="e#7097#8298#1" />
+            <element signature="e#8302#8465#0" />
+            <element signature="e#8467#8649#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/longest_common_subsequence.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#42#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/MaxTopRightRectangle.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1665">
+          <caret line="116" column="8" selection-start-line="116" selection-start-column="8" selection-end-line="116" selection-end-column="8" />
+          <folding>
+            <element signature="e#42#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/n2/MaxTopRightRectangle.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="279" column="5" selection-start-line="279" selection-start-column="5" selection-end-line="279" selection-end-column="5" />
+        <state relative-caret-position="181">
+          <caret line="249" column="27" selection-start-line="249" selection-start-column="27" selection-end-line="249" selection-end-column="27" />
           <folding>
             <element signature="e#56#75#0" expanded="true" />
             <element signature="e#3468#6096#0" />
-            <element signature="e#7497#7582#0" expanded="true" />
           </folding>
         </state>
       </provider>

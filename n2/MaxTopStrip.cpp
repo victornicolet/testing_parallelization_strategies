@@ -3,9 +3,9 @@
 //
 
 #include "MaxTopStrip.h"
-#include "Utils.h"
+#include "../Utils.h"
 #include <tbb/tbb.h>
-#include "Stopwatch.h"
+#include "../Stopwatch.h"
 
 // Max top strip. Parallelization strategy : Chunks of several rows
 struct MaxStripPar {

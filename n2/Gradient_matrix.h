@@ -1,9 +1,9 @@
 #ifndef PARALLEL_STRATEGIES_TESTING_GRADIENT_MATRIX_H
 #define PARALLEL_STRATEGIES_TESTING_GRADIENT_MATRIX_H
 
-#include "Utils.h"
-#include "Stopwatch.h"
-#include "Utils.h"
+
+#include "../Stopwatch.h"
+#include "../Utils.h"
 #include <tbb/tbb.h>
 
 class Gradient_matrix {

@@ -4,7 +4,7 @@
 
 #include "MaxTopRightRectangle.h"
 
-#include "Stopwatch.h"
+#include "../Stopwatch.h"
 
 using namespace std;
 /* All the kernels for the max-top-right rectangle. We need an auxiliary for the

@@ -3,7 +3,7 @@
 //
 
 #include "Gradient_matrix.h"
-#include "Utils.h"
+#include "../Utils.h"
 
 using namespace tbb;
 
